@@ -3,20 +3,14 @@
 ###################################
 
 #Read in data from csv file and download needed packages
-data <- read.csv2("Final_Data_PDR1.csv", header = TRUE)
-
-
-data <- read.csv2("Final_Data_PDR1.csv", header = TRUE)
-
-
-
+data <- read.csv2("Data/Final_Data_PDR1.csv", header = TRUE)
 data$Response.time <- as.numeric(as.character(data$Response.time))
 names(data)[1] <- "Reported.outcome"
-install.packages("effsize")
+#install.packages("effsize")
 library(effsize)
-install.packages("ltm")
+#install.packages("ltm")
 library(ltm)
-install.packages("psych")
+#install.packages("psych")
 library(psych)
 
 
@@ -58,10 +52,10 @@ sum(data$TP == "0")
 ###################################
 
 #Effect of time pressure on reported die roll outcome
-SP <- data[data$TP == "0",]$Reported.outcome
+SP <- data[data$TP == "0",]$Reported.outcome # no time pressure 
 mean(SP)
 sd(SP)
-TP <- data[data$TP == "1",]$Reported.outcome
+TP <- data[data$TP == "1",]$Reported.outcome # time pressure
 mean(TP)
 sd(TP)
 W <- wilcox.test(SP,TP,"less")
