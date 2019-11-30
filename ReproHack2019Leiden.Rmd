@@ -9,20 +9,23 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## OSF
 
+- the OSF project is publicly available
+- the folder structure is very clear (data and analysis are separated)
 - the OSF project did not have any explanation in the Wiki
 
+# Analysis
+
+- the JASP output could be added, together with the already present pdf
+- they share xlsx and csv... to avoid redundancy and confusion, better keep only csv
+- **R Script PDR1.R**
+    - the code does not point to the data
+        - solutions: add correct absolute path, use package `here`, or Rprojects
 
 
-```{r cars}
-summary(cars)
-```
 
-## Including Plots
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+
