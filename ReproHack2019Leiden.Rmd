@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## OSF
 
+- there should be a license
 - the OSF project is publicly available
 - the folder structure is very clear (data and analysis are separated)
 - the OSF project did not have any explanation in the Wiki
