@@ -1,0 +1,216 @@
+---
+title: "ReproHack"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Summary
+## OSF
+
+- there should be a license
+- the OSF project is publicly available
+- the folder structure is very clear (data and analysis are separated)
+- the OSF project did not have any explanation in the Wiki
+
+## Analysis
+
+- the JASP output could be added, together with the already present pdf
+- there are both xlsx and csv. to avoid redundancy and confusion, better keep only csv
+- **R Script PDR1.R**
+    - improve readability: maybe use `styler`?
+    - the code does not point to the data
+        - solutions: add correct absolute path, use package `here` with Rprojects
+    - comment out `install.packages`
+    - there is no data wrangling script. In other words, how was the "Final_Data" file produced from the "Raw_Data"? Although the process is described in the codebook, it would be nicer to document it as code.
+    - better documentation is needed for both analyses
+    - first analysis: means and SDs not reproduced, results not reproduced not only because of different numbers, but also because of a possible discrepancy in the statistical analysis (Wilcoxon signed rank in code, t-test in paper)
+    - second analysis: we were able to fully reproduce the results
+    - exploratory analysis: data cleaning commented out and confusing to follow, last exploratory analysis must be conducted on unfiltered dataset (but unclear in procedure)
+        - clear environment, rerun data loading, rerun all confirmatory analysis on new (filtered) dataset
+
+# Annotated code
+
+##  Loading data
+
+It'd be nice to separate installation from loading and comment out installation in case the person running the code doesn't want the package.
+
+```{r}
+# # install libraries
+# install.packages("effsize")
+# install.packages("ltm")
+# install.packages("psych")
+
+# load libraries
+library(effsize)
+library(ltm)
+library(psych)
+```
+
+Authors wrote `read.csv2("Final_Data_PDR1.csv", header = TRUE)`, but it should actually be `read.csv2("Data/Final_Data_PDR1.csv", header = TRUE)`
+
+```{r}
+# load data
+data <- read.csv2("Data/Final_Data_PDR1.csv", header = TRUE)
+data$Response.time <- as.numeric(as.character(data$Response.time))
+names(data)[1] <- "Reported.outcome"
+```
+
+## Demographics
+
+It might be a good idea to save calculations to variables instead of only outputting to the console.
+
+```{r}
+# the total sample
+total_N <- nrow(data)
+```
+
+Calculation participants to exclude based on `data$Exclusion`. Again, if it needs to be reported in the manuscript, better to save it as variable
+
+```{r}
+excluded_ppl <- nrow(data) - nrow(data[data$Exclusion == "0",])
+data <- data[data$Exclusion == "0",]
+n <- nrow(data)
+n
+```
+
+Calculation demographics: if it needs to be reported in the manuscript, better to save it as data frame. Also, no coding of `gender` variable in the codebook (which number is male/gemale/other?).
+
+```{r}
+#demographics after exclusions
+# TABLE
+demographics <- data.frame(
+    gender = t(prop.table(table(data$Gender)))
+)
+    
+prop.table(table(data$Gender))
+mean(data$Age, na.rm = TRUE)
+sd(data$Age, na.rm = TRUE)
+sum(data$TP == "1")
+sum(data$TP == "0")
+
+```
+
+
+##  Preregistered analyses
+
+Means, SDs, and analysis results don't match the reported results
+
+```{r}
+#Effect of time pressure on reported die roll outcome
+# no time pressure
+SP <- data[data$TP == "0",]$Reported.outcome 
+mean_sp <- mean(SP)
+sd_sp <- sd(SP)
+
+# time pressure
+TP <- data[data$TP == "1",]$Reported.outcome 
+mean_tp <- mean(TP)
+sd_tp <- sd(TP)
+
+# analysis
+W <- wilcox.test(SP,TP,"less")
+W
+-qnorm(W$p.value)
+rbc <- biserial.cor(data$Reported.outcome, data$TP)
+rbc
+r.test(n=n, r12=rbc, twotailed = FALSE)
+```
+
+These findings are reproduced
+
+```{r}
+# Was there cheating?
+# time pressure
+nrow(data[data$TP == "1",])
+chisq.test(table(TP), p = c(1/6, 1/6, 1/6, 1/6, 1/6, 1/6))
+chi2 <- unname(chisq.test(table(TP), p = c(1/6, 1/6, 1/6, 1/6, 1/6, 1/6))$statistic)
+nTP <- sum(data$TP == "1")
+Vtp <- sqrt(chi2/nTP*1)
+Vtp
+
+# no time pressure
+nrow(data[data$TP == "0",])
+chisq.test(table(SP), p = c(1/6, 1/6, 1/6, 1/6, 1/6, 1/6))
+chi2 <- unname(chisq.test(table(SP), p = c(1/6, 1/6, 1/6, 1/6, 1/6, 1/6))$statistic)
+nSP <- sum(data$TP == "0")
+Vsp <- sqrt(chi2/nSP*1)
+Vsp
+```
+
+
+## Exploratory analyses
+
+### with exclusions
+
+```{r}
+#time pressure manipulation check
+rtSP = data[data$TP == "0",]$Response.time
+rtTP = data[data$TP == "1",]$Response.time
+mSP <- mean(rtSP)
+sdSP <- sd(rtSP)
+maxSP <- mSP+5*sdSP
+mTP <- mean(rtTP)
+sdTP <- sd(rtTP)
+maxTP <- mTP+5*sdTP
+rtSP = data[data$TP == "0" & data$Response.time<maxSP,]$Response.time
+rtTP = data[data$TP == "1" & data$Response.time<maxTP,]$Response.time
+mean(rtSP)
+sd(rtSP)
+mean(rtTP)
+sd(rtTP)
+t.test(rtSP,rtTP, var.equal = TRUE)
+effsize::cohen.d(rtSP,rtTP)
+```
+
+```{r}
+#Self-report ratings
+prop.table(table(data$The.ratio.between.the.dice.roll.and.the.possible.reward.is...))
+prop.table(table(data$My.dice.role.was.fully.anonymous.only.I.could.know.what.I.rolled.))
+mean(data$What.is.the.chance.that.you.will.get.the.reward.)
+sd(data$What.is.the.chance.that.you.will.get.the.reward.)
+prop.table(table(data$Several.students.will.receive.a.monetary.reward.for.the.dice.under.cup.game.))
+```
+
+### without exclusions
+
+```{r}
+# reload data such that none of the data is excluded
+data <- read.csv2("Data/Final_Data_PDR1.csv", header = TRUE)
+data$Response.time <- as.numeric(as.character(data$Response.time))
+names(data)[1] <- "Reported.outcome"
+```
+
+```{r}
+#time pressure manipulation check
+rtSP = data[data$TP == "0",]$Response.time
+rtTP = data[data$TP == "1",]$Response.time
+mSP <- mean(rtSP)
+sdSP <- sd(rtSP)
+maxSP <- mSP+5*sdSP
+mTP <- mean(rtTP)
+sdTP <- sd(rtTP)
+maxTP <- mTP+5*sdTP
+rtSP = data[data$TP == "0",]$Response.time
+rtTP = data[data$TP == "1",]$Response.time
+mean(rtSP)
+sd(rtSP)
+mean(rtTP)
+sd(rtTP)
+t.test(rtSP,rtTP, var.equal = TRUE)
+effsize::cohen.d(rtSP,rtTP)
+```
+
+
+```{r}
+#Self-report ratings
+prop.table(table(data$The.ratio.between.the.dice.roll.and.the.possible.reward.is...))
+prop.table(table(data$My.dice.role.was.fully.anonymous.only.I.could.know.what.I.rolled.))
+mean(data$What.is.the.chance.that.you.will.get.the.reward.)
+sd(data$What.is.the.chance.that.you.will.get.the.reward.)
+prop.table(table(data$Several.students.will.receive.a.monetary.reward.for.the.dice.under.cup.game.))
+```
