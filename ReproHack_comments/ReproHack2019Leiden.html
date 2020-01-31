@@ -11,7 +11,7 @@
 
 <meta name="author" content="Antonio Schettino and Eirini Zormpa" />
 
-<meta name="date" content="2020-01-30" />
+<meta name="date" content="2020-01-31" />
 
 <title>ReproHack2019 (Leiden) - Reproducing Van der Cruyssen et al.</title>
 
@@ -1654,7 +1654,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">ReproHack2019 (Leiden) - Reproducing <a href="https://osf.io/qbk6z/">Van der Cruyssen et al.</a></h1>
 <h4 class="author"><a href="https://twitter.com/asch3tti">Antonio Schettino</a> and <a href="https://twitter.com/eirini_zormpa">Eirini Zormpa</a></h4>
-<h4 class="date">2020-01-30</h4>
+<h4 class="date">2020-01-31</h4>
 
 </div>
 
@@ -1845,12 +1845,139 @@ div.tocify {
 <h3>Comments</h3>
 <p>We recommend the following:</p>
 <ul>
-<li></li>
+<li>if the results of these calculations need to be reported in the manuscript, better to save them to variables instead of only outputting to console</li>
 </ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># the total sample</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">total_N &lt;-<span class="st"> </span><span class="kw">nrow</span>(data)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">total_N</a></code></pre></div>
+<pre><code>## [1] 461</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co">#exclude participants of time pressure condition who failed to report within the time limit, omit these lines for Exploratory analysis without exclusions</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">excluded_ppl &lt;-<span class="st"> </span><span class="kw">nrow</span>(data) <span class="op">-</span><span class="st"> </span><span class="kw">nrow</span>(data[data<span class="op">$</span>Exclusion <span class="op">==</span><span class="st"> &quot;0&quot;</span>,])</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">excluded_ppl</a></code></pre></div>
+<pre><code>## [1] 33</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">data &lt;-<span class="st"> </span>data[data<span class="op">$</span>Exclusion <span class="op">==</span><span class="st"> &quot;0&quot;</span>,]</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="kw">nrow</span>(data)</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">n</a></code></pre></div>
+<pre><code>## [1] 428</code></pre>
+<ul>
+<li>demographics after exclusion: if it needs to be reported in the manuscript, better to save it as data frame
+<ul>
+<li>no coding of <code>gender</code> variable in the codebook (which number is male/female/other?)</li>
+<li>variable name <code>TP</code> is unclear, including the codebook would help (see comment above)</li>
+</ul></li>
+<li>we <strong>successfully</strong> replicated the demographics results reported in the manuscript (p. 7)</li>
+</ul>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co">#demographics after exclusions</span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">demographics &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3">    <span class="dt">gender =</span> <span class="kw">t</span>(<span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>Gender)))</a>
+<a class="sourceLine" id="cb12-4" data-line-number="4">)</a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb12-6" data-line-number="6">gender_prop &lt;-<span class="st"> </span><span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>Gender))</a>
+<a class="sourceLine" id="cb12-7" data-line-number="7">mean_age &lt;-<span class="st"> </span><span class="kw">mean</span>(data<span class="op">$</span>Age, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb12-8" data-line-number="8">sd_age &lt;-<span class="st"> </span><span class="kw">sd</span>(data<span class="op">$</span>Age, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb12-9" data-line-number="9">TP_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">sum</span>(data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span>)</a>
+<a class="sourceLine" id="cb12-10" data-line-number="10">TP_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">sum</span>(data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span>)</a>
+<a class="sourceLine" id="cb12-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb12-12" data-line-number="12">gender_prop</a></code></pre></div>
+<pre><code>## 
+##       1       2       3 
+## 0.71729 0.27570 0.00701</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">mean_age</a></code></pre></div>
+<pre><code>## [1] 19.8</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">sd_age</a></code></pre></div>
+<pre><code>## [1] 2.58</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">TP_<span class="dv">1</span></a></code></pre></div>
+<pre><code>## [1] 198</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">TP_<span class="dv">2</span></a></code></pre></div>
+<pre><code>## [1] 230</code></pre>
 </div>
 </div>
-<div id="summary" class="section level1">
-<h1>Summary</h1>
+<div id="preregistered-analyses" class="section level2">
+<h2>Preregistered Analyses</h2>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="co">###################################</span></a>
+<a class="sourceLine" id="cb22-2" data-line-number="2"><span class="co">###   Preregistered analyses    </span><span class="al">###</span></a>
+<a class="sourceLine" id="cb22-3" data-line-number="3"><span class="co">###################################</span></a>
+<a class="sourceLine" id="cb22-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb22-5" data-line-number="5"><span class="co">#Effect of time pressure on reported die roll outcome</span></a>
+<a class="sourceLine" id="cb22-6" data-line-number="6">SP &lt;-<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span>,]<span class="op">$</span>Reported.outcome</a>
+<a class="sourceLine" id="cb22-7" data-line-number="7"><span class="kw">mean</span>(SP)</a>
+<a class="sourceLine" id="cb22-8" data-line-number="8"><span class="kw">sd</span>(SP)</a>
+<a class="sourceLine" id="cb22-9" data-line-number="9">TP &lt;-<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span>,]<span class="op">$</span>Reported.outcome</a>
+<a class="sourceLine" id="cb22-10" data-line-number="10"><span class="kw">mean</span>(TP)</a>
+<a class="sourceLine" id="cb22-11" data-line-number="11"><span class="kw">sd</span>(TP)</a>
+<a class="sourceLine" id="cb22-12" data-line-number="12">W &lt;-<span class="st"> </span><span class="kw">wilcox.test</span>(SP,TP,<span class="st">&quot;less&quot;</span>)</a>
+<a class="sourceLine" id="cb22-13" data-line-number="13">W</a>
+<a class="sourceLine" id="cb22-14" data-line-number="14"><span class="op">-</span><span class="kw">qnorm</span>(W<span class="op">$</span>p.value)</a>
+<a class="sourceLine" id="cb22-15" data-line-number="15">rbc &lt;-<span class="st"> </span><span class="kw">biserial.cor</span>(data<span class="op">$</span>Reported.outcome, data<span class="op">$</span>TP)</a>
+<a class="sourceLine" id="cb22-16" data-line-number="16">rbc</a>
+<a class="sourceLine" id="cb22-17" data-line-number="17"><span class="kw">r.test</span>(<span class="dt">n=</span>n, <span class="dt">r12=</span>rbc, <span class="dt">twotailed =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb22-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb22-19" data-line-number="19"><span class="co">#Was there cheating?</span></a>
+<a class="sourceLine" id="cb22-20" data-line-number="20"><span class="kw">nrow</span>(data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span>,])</a>
+<a class="sourceLine" id="cb22-21" data-line-number="21"><span class="kw">chisq.test</span>(<span class="kw">table</span>(TP), <span class="dt">p =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>))</a>
+<a class="sourceLine" id="cb22-22" data-line-number="22">chi2 &lt;-<span class="st"> </span><span class="kw">unname</span>(<span class="kw">chisq.test</span>(<span class="kw">table</span>(TP), <span class="dt">p =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>))<span class="op">$</span>statistic)</a>
+<a class="sourceLine" id="cb22-23" data-line-number="23">nTP &lt;-<span class="st"> </span><span class="kw">sum</span>(data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span>)</a>
+<a class="sourceLine" id="cb22-24" data-line-number="24">Vtp &lt;-<span class="st"> </span><span class="kw">sqrt</span>(chi2<span class="op">/</span>nTP<span class="op">*</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb22-25" data-line-number="25">Vtp</a>
+<a class="sourceLine" id="cb22-26" data-line-number="26"><span class="kw">nrow</span>(data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span>,])</a>
+<a class="sourceLine" id="cb22-27" data-line-number="27"><span class="kw">chisq.test</span>(<span class="kw">table</span>(SP), <span class="dt">p =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>))</a>
+<a class="sourceLine" id="cb22-28" data-line-number="28">chi2 &lt;-<span class="st"> </span><span class="kw">unname</span>(<span class="kw">chisq.test</span>(<span class="kw">table</span>(SP), <span class="dt">p =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>))<span class="op">$</span>statistic)</a>
+<a class="sourceLine" id="cb22-29" data-line-number="29">nSP &lt;-<span class="st"> </span><span class="kw">sum</span>(data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span>)</a>
+<a class="sourceLine" id="cb22-30" data-line-number="30">Vsp &lt;-<span class="st"> </span><span class="kw">sqrt</span>(chi2<span class="op">/</span>nSP<span class="op">*</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb22-31" data-line-number="31">Vsp</a></code></pre></div>
+<div id="comments-2" class="section level3">
+<h3>Comments</h3>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="co">#Effect of time pressure on reported die roll outcome</span></a>
+<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="co"># no time pressure</span></a>
+<a class="sourceLine" id="cb23-3" data-line-number="3">SP &lt;-<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span>,]<span class="op">$</span>Reported.outcome </a>
+<a class="sourceLine" id="cb23-4" data-line-number="4">mean_sp &lt;-<span class="st"> </span><span class="kw">mean</span>(SP)</a>
+<a class="sourceLine" id="cb23-5" data-line-number="5">sd_sp &lt;-<span class="st"> </span><span class="kw">sd</span>(SP)</a>
+<a class="sourceLine" id="cb23-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb23-7" data-line-number="7"><span class="co"># time pressure</span></a>
+<a class="sourceLine" id="cb23-8" data-line-number="8">TP &lt;-<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span>,]<span class="op">$</span>Reported.outcome </a>
+<a class="sourceLine" id="cb23-9" data-line-number="9">mean_tp &lt;-<span class="st"> </span><span class="kw">mean</span>(TP)</a>
+<a class="sourceLine" id="cb23-10" data-line-number="10">sd_tp &lt;-<span class="st"> </span><span class="kw">sd</span>(TP)</a>
+<a class="sourceLine" id="cb23-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb23-12" data-line-number="12"><span class="co"># analysis</span></a>
+<a class="sourceLine" id="cb23-13" data-line-number="13">W &lt;-<span class="st"> </span><span class="kw">wilcox.test</span>(SP,TP,<span class="st">&quot;less&quot;</span>)</a>
+<a class="sourceLine" id="cb23-14" data-line-number="14">W</a></code></pre></div>
+<pre><code>## 
+##  Wilcoxon rank sum test with continuity correction
+## 
+## data:  SP and TP
+## W = 23862, p-value = 0.8
+## alternative hypothesis: true location shift is less than 0</code></pre>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="op">-</span><span class="kw">qnorm</span>(W<span class="op">$</span>p.value)</a></code></pre></div>
+<pre><code>## [1] -0.869</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1">rbc &lt;-<span class="st"> </span><span class="kw">biserial.cor</span>(data<span class="op">$</span>Reported.outcome, data<span class="op">$</span>TP)</a>
+<a class="sourceLine" id="cb27-2" data-line-number="2">rbc</a></code></pre></div>
+<pre><code>## [1] 0.0423</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="kw">r.test</span>(<span class="dt">n=</span>n, <span class="dt">r12=</span>rbc, <span class="dt">twotailed =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<pre><code>## Correlation tests 
+## Call:r.test(n = n, r12 = rbc, twotailed = FALSE)
+## Test of significance of a  correlation 
+##  t value 0.87    with probability &lt; 0.19
+##  and confidence interval  -0.05 0.14</code></pre>
+<p>We recommend the following:</p>
+<ul>
+<li>we <strong>successfully</strong> reproduced means and SDs reported in the manuscript (<em>Table 1</em>, p. 5)</li>
+<li>minor typo: the rank-biserial correlation is 0.042, whereas in the manuscript it is reported as 0.05 (<em>Table 1</em>, p. 5)</li>
+<li>better to save to variable all the results, e.g., also the confidence interval of <em>r</em></li>
+<li>it would be good to document the applied transformation from <em>W</em> to <em>Z</em>, as well as clarify that the lower bound of the confidence interval of the effect size <em>r</em> is infinite (instead of the obtained value -0.053) because the test is one-tailed</li>
+</ul>
+<div id="section" class="section level59">
+<p></p>
+</div>
+</div>
+</div>
+<div id="old-comments" class="section level1">
+<h1>OLD COMMENTS</h1>
+<div id="section-1" class="section level59">
+<p></p>
+</div>
+</div>
+<div id="general-comments" class="section level1">
+<h1>General Comments</h1>
 <div id="osf" class="section level2">
 <h2>OSF</h2>
 <ul>
@@ -1868,11 +1995,6 @@ div.tocify {
 <li><strong>R Script PDR1.R</strong>
 <ul>
 <li>improve readability: maybe use <code>styler</code>?</li>
-<li>the code does not point to the data
-<ul>
-<li>solutions: add correct absolute path, use package <code>here</code> with Rprojects</li>
-</ul></li>
-<li>comment out <code>install.packages</code></li>
 <li>there is no data wrangling script. In other words, how was the “Final_Data” file produced from the “Raw_Data”? Although the process is described in the codebook, it would be nicer to document it as code.</li>
 <li>better documentation is needed for both analyses</li>
 <li>first analysis: means and SDs not reproduced, results not reproduced not only because of different numbers, but also because of a possible discrepancy in the statistical analysis (Wilcoxon signed rank in code, t-test in paper)</li>
@@ -1883,206 +2005,137 @@ div.tocify {
 </ul></li>
 </ul></li>
 </ul>
-</div>
-</div>
-<div id="annotated-code" class="section level1">
-<h1>Annotated code</h1>
-<div id="demographics-1" class="section level2">
-<h2>Demographics</h2>
-<p>It might be a good idea to save calculations to variables instead of only outputting to the console.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># the total sample</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">total_N &lt;-<span class="st"> </span><span class="kw">nrow</span>(data)</a></code></pre></div>
-<p>Calculation participants to exclude based on <code>data$Exclusion</code>. Again, if it needs to be reported in the manuscript, better to save it as variable</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">excluded_ppl &lt;-<span class="st"> </span><span class="kw">nrow</span>(data) <span class="op">-</span><span class="st"> </span><span class="kw">nrow</span>(data[data<span class="op">$</span>Exclusion <span class="op">==</span><span class="st"> &quot;0&quot;</span>,])</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">data &lt;-<span class="st"> </span>data[data<span class="op">$</span>Exclusion <span class="op">==</span><span class="st"> &quot;0&quot;</span>,]</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">n &lt;-<span class="st"> </span><span class="kw">nrow</span>(data)</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">n</a></code></pre></div>
-<pre><code>## [1] 428</code></pre>
-<p>Calculation demographics: if it needs to be reported in the manuscript, better to save it as data frame. Also, no coding of <code>gender</code> variable in the codebook (which number is male/gemale/other?).</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co">#demographics after exclusions</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co"># TABLE</span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">demographics &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb9-4" data-line-number="4">    <span class="dt">gender =</span> <span class="kw">t</span>(<span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>Gender)))</a>
-<a class="sourceLine" id="cb9-5" data-line-number="5">)</a>
-<a class="sourceLine" id="cb9-6" data-line-number="6">    </a>
-<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>Gender))</a></code></pre></div>
-<pre><code>## 
-##           1           2           3 
-## 0.717289720 0.275700935 0.007009346</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">mean</span>(data<span class="op">$</span>Age, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<pre><code>## [1] 19.77103</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">sd</span>(data<span class="op">$</span>Age, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<pre><code>## [1] 2.581487</code></pre>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">sum</span>(data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span>)</a></code></pre></div>
-<pre><code>## [1] 198</code></pre>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">sum</span>(data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span>)</a></code></pre></div>
-<pre><code>## [1] 230</code></pre>
-</div>
-<div id="preregistered-analyses" class="section level2">
-<h2>Preregistered analyses</h2>
-<p>Means, SDs, and analysis results don’t match the reported results</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co">#Effect of time pressure on reported die roll outcome</span></a>
-<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="co"># no time pressure</span></a>
-<a class="sourceLine" id="cb19-3" data-line-number="3">SP &lt;-<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span>,]<span class="op">$</span>Reported.outcome </a>
-<a class="sourceLine" id="cb19-4" data-line-number="4">mean_sp &lt;-<span class="st"> </span><span class="kw">mean</span>(SP)</a>
-<a class="sourceLine" id="cb19-5" data-line-number="5">sd_sp &lt;-<span class="st"> </span><span class="kw">sd</span>(SP)</a>
-<a class="sourceLine" id="cb19-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb19-7" data-line-number="7"><span class="co"># time pressure</span></a>
-<a class="sourceLine" id="cb19-8" data-line-number="8">TP &lt;-<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span>,]<span class="op">$</span>Reported.outcome </a>
-<a class="sourceLine" id="cb19-9" data-line-number="9">mean_tp &lt;-<span class="st"> </span><span class="kw">mean</span>(TP)</a>
-<a class="sourceLine" id="cb19-10" data-line-number="10">sd_tp &lt;-<span class="st"> </span><span class="kw">sd</span>(TP)</a>
-<a class="sourceLine" id="cb19-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb19-12" data-line-number="12"><span class="co"># analysis</span></a>
-<a class="sourceLine" id="cb19-13" data-line-number="13">W &lt;-<span class="st"> </span><span class="kw">wilcox.test</span>(SP,TP,<span class="st">&quot;less&quot;</span>)</a>
-<a class="sourceLine" id="cb19-14" data-line-number="14">W</a></code></pre></div>
-<pre><code>## 
-##  Wilcoxon rank sum test with continuity correction
-## 
-## data:  SP and TP
-## W = 23862, p-value = 0.8076
-## alternative hypothesis: true location shift is less than 0</code></pre>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="op">-</span><span class="kw">qnorm</span>(W<span class="op">$</span>p.value)</a></code></pre></div>
-<pre><code>## [1] -0.8690343</code></pre>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">rbc &lt;-<span class="st"> </span><span class="kw">biserial.cor</span>(data<span class="op">$</span>Reported.outcome, data<span class="op">$</span>TP)</a>
-<a class="sourceLine" id="cb23-2" data-line-number="2">rbc</a></code></pre></div>
-<pre><code>## [1] 0.0423285</code></pre>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="kw">r.test</span>(<span class="dt">n=</span>n, <span class="dt">r12=</span>rbc, <span class="dt">twotailed =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
-<pre><code>## Correlation tests 
-## Call:r.test(n = n, r12 = rbc, twotailed = FALSE)
-## Test of significance of a  correlation 
-##  t value 0.87    with probability &lt; 0.19
-##  and confidence interval  -0.05 0.14</code></pre>
 <p>These findings are reproduced</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="co"># Was there cheating?</span></a>
-<a class="sourceLine" id="cb27-2" data-line-number="2"><span class="co"># time pressure</span></a>
-<a class="sourceLine" id="cb27-3" data-line-number="3"><span class="kw">nrow</span>(data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span>,])</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="co"># Was there cheating?</span></a>
+<a class="sourceLine" id="cb31-2" data-line-number="2"><span class="co"># time pressure</span></a>
+<a class="sourceLine" id="cb31-3" data-line-number="3"><span class="kw">nrow</span>(data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span>,])</a></code></pre></div>
 <pre><code>## [1] 198</code></pre>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="kw">chisq.test</span>(<span class="kw">table</span>(TP), <span class="dt">p =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="kw">chisq.test</span>(<span class="kw">table</span>(TP), <span class="dt">p =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>))</a></code></pre></div>
 <pre><code>## 
 ##  Chi-squared test for given probabilities
 ## 
 ## data:  table(TP)
-## X-squared = 1.2121, df = 5, p-value = 0.9437</code></pre>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">chi2 &lt;-<span class="st"> </span><span class="kw">unname</span>(<span class="kw">chisq.test</span>(<span class="kw">table</span>(TP), <span class="dt">p =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>))<span class="op">$</span>statistic)</a>
-<a class="sourceLine" id="cb31-2" data-line-number="2">nTP &lt;-<span class="st"> </span><span class="kw">sum</span>(data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span>)</a>
-<a class="sourceLine" id="cb31-3" data-line-number="3">Vtp &lt;-<span class="st"> </span><span class="kw">sqrt</span>(chi2<span class="op">/</span>nTP<span class="op">*</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb31-4" data-line-number="4">Vtp</a></code></pre></div>
-<pre><code>## [1] 0.07824209</code></pre>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="co"># no time pressure</span></a>
-<a class="sourceLine" id="cb33-2" data-line-number="2"><span class="kw">nrow</span>(data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span>,])</a></code></pre></div>
+## X-squared = 1, df = 5, p-value = 0.9</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1">chi2 &lt;-<span class="st"> </span><span class="kw">unname</span>(<span class="kw">chisq.test</span>(<span class="kw">table</span>(TP), <span class="dt">p =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>))<span class="op">$</span>statistic)</a>
+<a class="sourceLine" id="cb35-2" data-line-number="2">nTP &lt;-<span class="st"> </span><span class="kw">sum</span>(data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span>)</a>
+<a class="sourceLine" id="cb35-3" data-line-number="3">Vtp &lt;-<span class="st"> </span><span class="kw">sqrt</span>(chi2<span class="op">/</span>nTP<span class="op">*</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb35-4" data-line-number="4">Vtp</a></code></pre></div>
+<pre><code>## [1] 0.0782</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="co"># no time pressure</span></a>
+<a class="sourceLine" id="cb37-2" data-line-number="2"><span class="kw">nrow</span>(data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span>,])</a></code></pre></div>
 <pre><code>## [1] 230</code></pre>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="kw">chisq.test</span>(<span class="kw">table</span>(SP), <span class="dt">p =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="kw">chisq.test</span>(<span class="kw">table</span>(SP), <span class="dt">p =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>))</a></code></pre></div>
 <pre><code>## 
 ##  Chi-squared test for given probabilities
 ## 
 ## data:  table(SP)
-## X-squared = 9.0609, df = 5, p-value = 0.1067</code></pre>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">chi2 &lt;-<span class="st"> </span><span class="kw">unname</span>(<span class="kw">chisq.test</span>(<span class="kw">table</span>(SP), <span class="dt">p =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>))<span class="op">$</span>statistic)</a>
-<a class="sourceLine" id="cb37-2" data-line-number="2">nSP &lt;-<span class="st"> </span><span class="kw">sum</span>(data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span>)</a>
-<a class="sourceLine" id="cb37-3" data-line-number="3">Vsp &lt;-<span class="st"> </span><span class="kw">sqrt</span>(chi2<span class="op">/</span>nSP<span class="op">*</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb37-4" data-line-number="4">Vsp</a></code></pre></div>
-<pre><code>## [1] 0.198482</code></pre>
+## X-squared = 9, df = 5, p-value = 0.1</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">chi2 &lt;-<span class="st"> </span><span class="kw">unname</span>(<span class="kw">chisq.test</span>(<span class="kw">table</span>(SP), <span class="dt">p =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>))<span class="op">$</span>statistic)</a>
+<a class="sourceLine" id="cb41-2" data-line-number="2">nSP &lt;-<span class="st"> </span><span class="kw">sum</span>(data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span>)</a>
+<a class="sourceLine" id="cb41-3" data-line-number="3">Vsp &lt;-<span class="st"> </span><span class="kw">sqrt</span>(chi2<span class="op">/</span>nSP<span class="op">*</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb41-4" data-line-number="4">Vsp</a></code></pre></div>
+<pre><code>## [1] 0.198</code></pre>
 </div>
 <div id="exploratory-analyses" class="section level2">
 <h2>Exploratory analyses</h2>
 <div id="with-exclusions" class="section level3">
 <h3>with exclusions</h3>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="co">#time pressure manipulation check</span></a>
-<a class="sourceLine" id="cb39-2" data-line-number="2">rtSP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span>,]<span class="op">$</span>Response.time</a>
-<a class="sourceLine" id="cb39-3" data-line-number="3">rtTP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span>,]<span class="op">$</span>Response.time</a>
-<a class="sourceLine" id="cb39-4" data-line-number="4">mSP &lt;-<span class="st"> </span><span class="kw">mean</span>(rtSP)</a>
-<a class="sourceLine" id="cb39-5" data-line-number="5">sdSP &lt;-<span class="st"> </span><span class="kw">sd</span>(rtSP)</a>
-<a class="sourceLine" id="cb39-6" data-line-number="6">maxSP &lt;-<span class="st"> </span>mSP<span class="op">+</span><span class="dv">5</span><span class="op">*</span>sdSP</a>
-<a class="sourceLine" id="cb39-7" data-line-number="7">mTP &lt;-<span class="st"> </span><span class="kw">mean</span>(rtTP)</a>
-<a class="sourceLine" id="cb39-8" data-line-number="8">sdTP &lt;-<span class="st"> </span><span class="kw">sd</span>(rtTP)</a>
-<a class="sourceLine" id="cb39-9" data-line-number="9">maxTP &lt;-<span class="st"> </span>mTP<span class="op">+</span><span class="dv">5</span><span class="op">*</span>sdTP</a>
-<a class="sourceLine" id="cb39-10" data-line-number="10">rtSP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span> <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>Response.time<span class="op">&lt;</span>maxSP,]<span class="op">$</span>Response.time</a>
-<a class="sourceLine" id="cb39-11" data-line-number="11">rtTP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span> <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>Response.time<span class="op">&lt;</span>maxTP,]<span class="op">$</span>Response.time</a>
-<a class="sourceLine" id="cb39-12" data-line-number="12"><span class="kw">mean</span>(rtSP)</a></code></pre></div>
-<pre><code>## [1] 9.098568</code></pre>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="kw">sd</span>(rtSP)</a></code></pre></div>
-<pre><code>## [1] 5.430758</code></pre>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="kw">mean</span>(rtTP)</a></code></pre></div>
-<pre><code>## [1] 4.980833</code></pre>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1"><span class="kw">sd</span>(rtTP)</a></code></pre></div>
-<pre><code>## [1] 1.388488</code></pre>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1"><span class="kw">t.test</span>(rtSP,rtTP, <span class="dt">var.equal =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="co">#time pressure manipulation check</span></a>
+<a class="sourceLine" id="cb43-2" data-line-number="2">rtSP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span>,]<span class="op">$</span>Response.time</a>
+<a class="sourceLine" id="cb43-3" data-line-number="3">rtTP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span>,]<span class="op">$</span>Response.time</a>
+<a class="sourceLine" id="cb43-4" data-line-number="4">mSP &lt;-<span class="st"> </span><span class="kw">mean</span>(rtSP)</a>
+<a class="sourceLine" id="cb43-5" data-line-number="5">sdSP &lt;-<span class="st"> </span><span class="kw">sd</span>(rtSP)</a>
+<a class="sourceLine" id="cb43-6" data-line-number="6">maxSP &lt;-<span class="st"> </span>mSP<span class="op">+</span><span class="dv">5</span><span class="op">*</span>sdSP</a>
+<a class="sourceLine" id="cb43-7" data-line-number="7">mTP &lt;-<span class="st"> </span><span class="kw">mean</span>(rtTP)</a>
+<a class="sourceLine" id="cb43-8" data-line-number="8">sdTP &lt;-<span class="st"> </span><span class="kw">sd</span>(rtTP)</a>
+<a class="sourceLine" id="cb43-9" data-line-number="9">maxTP &lt;-<span class="st"> </span>mTP<span class="op">+</span><span class="dv">5</span><span class="op">*</span>sdTP</a>
+<a class="sourceLine" id="cb43-10" data-line-number="10">rtSP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span> <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>Response.time<span class="op">&lt;</span>maxSP,]<span class="op">$</span>Response.time</a>
+<a class="sourceLine" id="cb43-11" data-line-number="11">rtTP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span> <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>Response.time<span class="op">&lt;</span>maxTP,]<span class="op">$</span>Response.time</a>
+<a class="sourceLine" id="cb43-12" data-line-number="12"><span class="kw">mean</span>(rtSP)</a></code></pre></div>
+<pre><code>## [1] 9.1</code></pre>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1"><span class="kw">sd</span>(rtSP)</a></code></pre></div>
+<pre><code>## [1] 5.43</code></pre>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1"><span class="kw">mean</span>(rtTP)</a></code></pre></div>
+<pre><code>## [1] 4.98</code></pre>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1"><span class="kw">sd</span>(rtTP)</a></code></pre></div>
+<pre><code>## [1] 1.39</code></pre>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="kw">t.test</span>(rtSP,rtTP, <span class="dt">var.equal =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <pre><code>## 
 ##  Two Sample t-test
 ## 
 ## data:  rtSP and rtTP
-## t = 10.378, df = 425, p-value &lt; 2.2e-16
+## t = 10, df = 425, p-value &lt;2e-16
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
-##  3.337879 4.897590
+##  3.34 4.90
 ## sample estimates:
 ## mean of x mean of y 
-##  9.098568  4.980833</code></pre>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1">effsize<span class="op">::</span><span class="kw">cohen.d</span>(rtSP,rtTP)</a></code></pre></div>
+##      9.10      4.98</code></pre>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1">effsize<span class="op">::</span><span class="kw">cohen.d</span>(rtSP,rtTP)</a></code></pre></div>
 <pre><code>## 
 ## Cohen's d
 ## 
-## d estimate: 1.00715 (large)
+## d estimate: 1.01 (large)
 ## 95 percent confidence interval:
-##     lower     upper 
-## 0.8047348 1.2095657</code></pre>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="co">#Self-report ratings</span></a>
-<a class="sourceLine" id="cb51-2" data-line-number="2"><span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>The.ratio.between.the.dice.roll.and.the.possible.reward.is...))</a></code></pre></div>
+## lower upper 
+## 0.805 1.210</code></pre>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1"><span class="co">#Self-report ratings</span></a>
+<a class="sourceLine" id="cb55-2" data-line-number="2"><span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>The.ratio.between.the.dice.roll.and.the.possible.reward.is...))</a></code></pre></div>
 <pre><code>## 
 ##   The reward (in euro) is equal to the outcome of the dice roll. 
-##                                                       0.07710280 
+##                                                           0.0771 
 ## The reward (in euro) is four times the outcome of the dice roll. 
-##                                                       0.01168224 
+##                                                           0.0117 
 ##    The reward (in euro) is half of the outcome of the dice roll. 
-##                                                       0.01168224 
+##                                                           0.0117 
 ##  The reward (in euro) is two times the outcome of the dice roll. 
-##                                                       0.89953271</code></pre>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>My.dice.role.was.fully.anonymous.only.I.could.know.what.I.rolled.))</a></code></pre></div>
+##                                                           0.8995</code></pre>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>My.dice.role.was.fully.anonymous.only.I.could.know.what.I.rolled.))</a></code></pre></div>
 <pre><code>## 
 ##                 Believe          Do not believe                 Neutral 
-##              0.23130841              0.05373832              0.07710280 
+##                  0.2313                  0.0537                  0.0771 
 ##        Strongly believe Strongly do not believe 
-##              0.60981308              0.02803738</code></pre>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1"><span class="kw">mean</span>(data<span class="op">$</span>What.is.the.chance.that.you.will.get.the.reward.)</a></code></pre></div>
-<pre><code>## [1] 22.53972</code></pre>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="kw">sd</span>(data<span class="op">$</span>What.is.the.chance.that.you.will.get.the.reward.)</a></code></pre></div>
-<pre><code>## [1] 26.80934</code></pre>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1"><span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>Several.students.will.receive.a.monetary.reward.for.the.dice.under.cup.game.))</a></code></pre></div>
+##                  0.6098                  0.0280</code></pre>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1"><span class="kw">mean</span>(data<span class="op">$</span>What.is.the.chance.that.you.will.get.the.reward.)</a></code></pre></div>
+<pre><code>## [1] 22.5</code></pre>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1"><span class="kw">sd</span>(data<span class="op">$</span>What.is.the.chance.that.you.will.get.the.reward.)</a></code></pre></div>
+<pre><code>## [1] 26.8</code></pre>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1"><span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>Several.students.will.receive.a.monetary.reward.for.the.dice.under.cup.game.))</a></code></pre></div>
 <pre><code>## 
 ##                 Believe          Do not believe                 Neutral 
-##               0.2570093               0.2476636               0.2616822 
+##                  0.2570                  0.2477                  0.2617 
 ##        Strongly believe Strongly do not believe 
-##               0.0911215               0.1425234</code></pre>
+##                  0.0911                  0.1425</code></pre>
 </div>
 <div id="without-exclusions" class="section level3">
 <h3>without exclusions</h3>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1"><span class="co"># reload data such that none of the data is excluded</span></a>
-<a class="sourceLine" id="cb61-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw">read.csv2</span>(<span class="st">&quot;Data/Final_Data_PDR1.csv&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb61-3" data-line-number="3">data<span class="op">$</span>Response.time &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">as.character</span>(data<span class="op">$</span>Response.time))</a>
-<a class="sourceLine" id="cb61-4" data-line-number="4"><span class="kw">names</span>(data)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;Reported.outcome&quot;</span></a></code></pre></div>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" data-line-number="1"><span class="co">#time pressure manipulation check</span></a>
-<a class="sourceLine" id="cb62-2" data-line-number="2">rtSP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span>,]<span class="op">$</span>Response.time</a>
-<a class="sourceLine" id="cb62-3" data-line-number="3">rtTP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span>,]<span class="op">$</span>Response.time</a>
-<a class="sourceLine" id="cb62-4" data-line-number="4">mSP &lt;-<span class="st"> </span><span class="kw">mean</span>(rtSP)</a>
-<a class="sourceLine" id="cb62-5" data-line-number="5">sdSP &lt;-<span class="st"> </span><span class="kw">sd</span>(rtSP)</a>
-<a class="sourceLine" id="cb62-6" data-line-number="6">maxSP &lt;-<span class="st"> </span>mSP<span class="op">+</span><span class="dv">5</span><span class="op">*</span>sdSP</a>
-<a class="sourceLine" id="cb62-7" data-line-number="7">mTP &lt;-<span class="st"> </span><span class="kw">mean</span>(rtTP)</a>
-<a class="sourceLine" id="cb62-8" data-line-number="8">sdTP &lt;-<span class="st"> </span><span class="kw">sd</span>(rtTP)</a>
-<a class="sourceLine" id="cb62-9" data-line-number="9">maxTP &lt;-<span class="st"> </span>mTP<span class="op">+</span><span class="dv">5</span><span class="op">*</span>sdTP</a>
-<a class="sourceLine" id="cb62-10" data-line-number="10">rtSP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span>,]<span class="op">$</span>Response.time</a>
-<a class="sourceLine" id="cb62-11" data-line-number="11">rtTP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span>,]<span class="op">$</span>Response.time</a>
-<a class="sourceLine" id="cb62-12" data-line-number="12"><span class="kw">mean</span>(rtSP)</a>
-<a class="sourceLine" id="cb62-13" data-line-number="13"><span class="kw">sd</span>(rtSP)</a>
-<a class="sourceLine" id="cb62-14" data-line-number="14"><span class="kw">mean</span>(rtTP)</a>
-<a class="sourceLine" id="cb62-15" data-line-number="15"><span class="kw">sd</span>(rtTP)</a>
-<a class="sourceLine" id="cb62-16" data-line-number="16"><span class="kw">t.test</span>(rtSP,rtTP, <span class="dt">var.equal =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb62-17" data-line-number="17">effsize<span class="op">::</span><span class="kw">cohen.d</span>(rtSP,rtTP)</a></code></pre></div>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1"><span class="co">#Self-report ratings</span></a>
-<a class="sourceLine" id="cb63-2" data-line-number="2"><span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>The.ratio.between.the.dice.roll.and.the.possible.reward.is...))</a>
-<a class="sourceLine" id="cb63-3" data-line-number="3"><span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>My.dice.role.was.fully.anonymous.only.I.could.know.what.I.rolled.))</a>
-<a class="sourceLine" id="cb63-4" data-line-number="4"><span class="kw">mean</span>(data<span class="op">$</span>What.is.the.chance.that.you.will.get.the.reward.)</a>
-<a class="sourceLine" id="cb63-5" data-line-number="5"><span class="kw">sd</span>(data<span class="op">$</span>What.is.the.chance.that.you.will.get.the.reward.)</a>
-<a class="sourceLine" id="cb63-6" data-line-number="6"><span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>Several.students.will.receive.a.monetary.reward.for.the.dice.under.cup.game.))</a></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" data-line-number="1"><span class="co"># reload data such that none of the data is excluded</span></a>
+<a class="sourceLine" id="cb65-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw">read.csv2</span>(<span class="st">&quot;Data/Final_Data_PDR1.csv&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb65-3" data-line-number="3">data<span class="op">$</span>Response.time &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">as.character</span>(data<span class="op">$</span>Response.time))</a>
+<a class="sourceLine" id="cb65-4" data-line-number="4"><span class="kw">names</span>(data)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;Reported.outcome&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" data-line-number="1"><span class="co">#time pressure manipulation check</span></a>
+<a class="sourceLine" id="cb66-2" data-line-number="2">rtSP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span>,]<span class="op">$</span>Response.time</a>
+<a class="sourceLine" id="cb66-3" data-line-number="3">rtTP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span>,]<span class="op">$</span>Response.time</a>
+<a class="sourceLine" id="cb66-4" data-line-number="4">mSP &lt;-<span class="st"> </span><span class="kw">mean</span>(rtSP)</a>
+<a class="sourceLine" id="cb66-5" data-line-number="5">sdSP &lt;-<span class="st"> </span><span class="kw">sd</span>(rtSP)</a>
+<a class="sourceLine" id="cb66-6" data-line-number="6">maxSP &lt;-<span class="st"> </span>mSP<span class="op">+</span><span class="dv">5</span><span class="op">*</span>sdSP</a>
+<a class="sourceLine" id="cb66-7" data-line-number="7">mTP &lt;-<span class="st"> </span><span class="kw">mean</span>(rtTP)</a>
+<a class="sourceLine" id="cb66-8" data-line-number="8">sdTP &lt;-<span class="st"> </span><span class="kw">sd</span>(rtTP)</a>
+<a class="sourceLine" id="cb66-9" data-line-number="9">maxTP &lt;-<span class="st"> </span>mTP<span class="op">+</span><span class="dv">5</span><span class="op">*</span>sdTP</a>
+<a class="sourceLine" id="cb66-10" data-line-number="10">rtSP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span>,]<span class="op">$</span>Response.time</a>
+<a class="sourceLine" id="cb66-11" data-line-number="11">rtTP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span>,]<span class="op">$</span>Response.time</a>
+<a class="sourceLine" id="cb66-12" data-line-number="12"><span class="kw">mean</span>(rtSP)</a>
+<a class="sourceLine" id="cb66-13" data-line-number="13"><span class="kw">sd</span>(rtSP)</a>
+<a class="sourceLine" id="cb66-14" data-line-number="14"><span class="kw">mean</span>(rtTP)</a>
+<a class="sourceLine" id="cb66-15" data-line-number="15"><span class="kw">sd</span>(rtTP)</a>
+<a class="sourceLine" id="cb66-16" data-line-number="16"><span class="kw">t.test</span>(rtSP,rtTP, <span class="dt">var.equal =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb66-17" data-line-number="17">effsize<span class="op">::</span><span class="kw">cohen.d</span>(rtSP,rtTP)</a></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" data-line-number="1"><span class="co">#Self-report ratings</span></a>
+<a class="sourceLine" id="cb67-2" data-line-number="2"><span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>The.ratio.between.the.dice.roll.and.the.possible.reward.is...))</a>
+<a class="sourceLine" id="cb67-3" data-line-number="3"><span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>My.dice.role.was.fully.anonymous.only.I.could.know.what.I.rolled.))</a>
+<a class="sourceLine" id="cb67-4" data-line-number="4"><span class="kw">mean</span>(data<span class="op">$</span>What.is.the.chance.that.you.will.get.the.reward.)</a>
+<a class="sourceLine" id="cb67-5" data-line-number="5"><span class="kw">sd</span>(data<span class="op">$</span>What.is.the.chance.that.you.will.get.the.reward.)</a>
+<a class="sourceLine" id="cb67-6" data-line-number="6"><span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>Several.students.will.receive.a.monetary.reward.for.the.dice.under.cup.game.))</a></code></pre></div>
 </div>
 </div>
 </div>

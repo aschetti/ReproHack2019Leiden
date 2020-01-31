@@ -260,7 +260,8 @@ n
 
 * demographics after exclusion: if it needs to be reported in the manuscript, better to save it as data frame
     * no coding of `gender` variable in the codebook (which number is male/female/other?)
-    * variable name `TP` is unclear (perhaps time pressure?)
+    * variable name `TP` is unclear, including the codebook would help (see comment above)
+* we **successfully** replicated the demographics results reported in the manuscript (p. 7)
 
 ```{r comment-demographics2}
 
@@ -282,8 +283,6 @@ TP_1
 TP_2
 
 ```
-
-
 
 ## Preregistered Analyses
 
@@ -323,46 +322,10 @@ Vsp
 
 ```
 
+### Comments
 
+```{r comment-preregistered-analyses}
 
-
-
-
-
-# Summary
-## OSF
-
-- there should be a license
-- the OSF project is publicly available
-- the folder structure is very clear (data and analysis are separated)
-- the OSF project did not have any explanation in the Wiki
-
-## Analysis
-
-- the JASP output could be added, together with the already present pdf
-- there are both xlsx and csv. to avoid redundancy and confusion, better keep only csv
-- **R Script PDR1.R**
-    - improve readability: maybe use `styler`?
-    - the code does not point to the data
-        - solutions: add correct absolute path, use package `here` with Rprojects
-    - comment out `install.packages`
-    - there is no data wrangling script. In other words, how was the "Final_Data" file produced from the "Raw_Data"? Although the process is described in the codebook, it would be nicer to document it as code.
-    - better documentation is needed for both analyses
-    - first analysis: means and SDs not reproduced, results not reproduced not only because of different numbers, but also because of a possible discrepancy in the statistical analysis (Wilcoxon signed rank in code, t-test in paper)
-    - second analysis: we were able to fully reproduce the results
-    - exploratory analysis: data cleaning commented out and confusing to follow, last exploratory analysis must be conducted on unfiltered dataset (but unclear in procedure)
-        - clear environment, rerun data loading, rerun all confirmatory analysis on new (filtered) dataset
-
-
-
-
-
-
-##  Preregistered analyses
-
-Means, SDs, and analysis results don't match the reported results
-
-```{r}
 #Effect of time pressure on reported die roll outcome
 # no time pressure
 SP <- data[data$TP == "0",]$Reported.outcome 
@@ -382,6 +345,56 @@ rbc <- biserial.cor(data$Reported.outcome, data$TP)
 rbc
 r.test(n=n, r12=rbc, twotailed = FALSE)
 ```
+
+We recommend the following:
+
+* we **successfully** reproduced means and SDs reported in the manuscript (_Table 1_, p. 5)
+* minor typo: the rank-biserial correlation is `r rbc`, whereas in the manuscript it is reported as 0.05 (_Table 1_, p. 5)
+* better to save to variable all the results, e.g., also the confidence interval of _r_
+* it would be good to document the applied transformation from _W_ to _Z_, as well as clarify that the lower bound of the confidence interval of the effect size _r_ is infinite (instead of the obtained value `r r.test(n=n, r12=rbc, twotailed = FALSE)$ci[1]`) because the test is one-tailed
+
+
+
+
+
+
+
+
+
+
+
+
+
+###########################################################
+# OLD COMMENTS
+###########################################################
+
+
+
+# General Comments
+## OSF
+
+- there should be a license
+- the OSF project is publicly available
+- the folder structure is very clear (data and analysis are separated)
+- the OSF project did not have any explanation in the Wiki
+
+## Analysis
+
+- the JASP output could be added, together with the already present pdf
+- there are both xlsx and csv. to avoid redundancy and confusion, better keep only csv
+- **R Script PDR1.R**
+    - improve readability: maybe use `styler`?
+    - there is no data wrangling script. In other words, how was the "Final_Data" file produced from the "Raw_Data"? Although the process is described in the codebook, it would be nicer to document it as code.
+    - better documentation is needed for both analyses
+    - first analysis: means and SDs not reproduced, results not reproduced not only because of different numbers, but also because of a possible discrepancy in the statistical analysis (Wilcoxon signed rank in code, t-test in paper)
+    - second analysis: we were able to fully reproduce the results
+    - exploratory analysis: data cleaning commented out and confusing to follow, last exploratory analysis must be conducted on unfiltered dataset (but unclear in procedure)
+        - clear environment, rerun data loading, rerun all confirmatory analysis on new (filtered) dataset
+
+
+
+
 
 These findings are reproduced
 
