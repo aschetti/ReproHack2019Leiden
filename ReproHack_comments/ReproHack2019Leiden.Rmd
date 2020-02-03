@@ -1,5 +1,5 @@
 ---
-title: "ReproHack2019 (Leiden) - Reproducing [Van der Cruyssen et al.](https://osf.io/qbk6z/)"
+title: "ReproHack2019 (Leiden) - Reproducing Van der Cruyssen et al."
 date: '`r Sys.Date()`'
 author: "[Antonio Schettino](https://twitter.com/asch3tti) and [Eirini Zormpa](https://twitter.com/eirini_zormpa)"
 output:
@@ -33,7 +33,9 @@ opts_chunk$set(
 
 ```
 
-This is the original script (file available at `r here("authors_materials_OSF/Analysis/R Script PDR1.R")`).
+Preprint accessed on Jan. 30th 2020 from [OSF Preprints](https://osf.io/qbk6z/). Materials accessed on Jan. 30th 2020 from [OSF](https://osf.io/xwzpc/).
+
+Below is the original script (file available at `r here("authors_materials_OSF/Analysis/R Script PDR1.R")`).
 
 ```{r original-script, eval = FALSE}
 
@@ -198,8 +200,8 @@ library(psych)
 
 * load the data
     * authors wrote `read.csv2("Final_Data_PDR1.csv", header = TRUE)` but, according to their folder structure, it should be `read.csv2("Data/Final_Data_PDR1.csv", header = TRUE)`
-    * better to use _R Projects_ and locate files using the `here` package (see example below)
-    * better to integrate the codebook (available at `here("authors_materials_OSF/Codebook PDR1.pdf")`) and the analysis script, to help replicators understand the data (see the R package [`codebook`](https://github.com/rubenarslan/codebook))
+    * to increase reproducibility, better to use _R Projects_ and locate files using the `here` package (see example below)
+    * better to integrate the codebook (available at `here("authors_materials_OSF/Codebook PDR1.pdf")`) within the analysis script, to help replicators understand the data (see the R package [`codebook`](https://github.com/rubenarslan/codebook))
 
 ```{r comment-load-data}
 
@@ -324,7 +326,7 @@ Vsp
 
 ### Comments
 
-```{r comment-preregistered-analyses}
+```{r comment-preregistered-analyses1}
 
 #Effect of time pressure on reported die roll outcome
 # no time pressure
@@ -346,59 +348,16 @@ rbc
 r.test(n=n, r12=rbc, twotailed = FALSE)
 ```
 
+We **successfully** reproduced means and SDs reported in the manuscript (_Table 1_, p. 5).
+
 We recommend the following:
 
-* we **successfully** reproduced means and SDs reported in the manuscript (_Table 1_, p. 5)
-* minor typo: the rank-biserial correlation is `r rbc`, whereas in the manuscript it is reported as 0.05 (_Table 1_, p. 5)
+* minor typo: the rank-biserial correlation is `r rbc`, whereas in the manuscript it is reported as **0.05** (_Table 1_, p. 5)
 * better to save to variable all the results, e.g., also the confidence interval of _r_
-* it would be good to document the applied transformation from _W_ to _Z_, as well as clarify that the lower bound of the confidence interval of the effect size _r_ is infinite (instead of the obtained value `r r.test(n=n, r12=rbc, twotailed = FALSE)$ci[1]`) because the test is one-tailed
+* it would be good to document the applied transformation from _W_ to _Z_, as well as clarify that the lower bound of the confidence interval of the effect size _r_ is infinite -- instead of the obtained value `r r.test(n=n, r12=rbc, twotailed = FALSE)$ci[1]` -- because the test is one-tailed
 
+```{r comment-preregistered-analyses2}
 
-
-
-
-
-
-
-
-
-
-
-
-###########################################################
-# OLD COMMENTS
-###########################################################
-
-
-
-# General Comments
-## OSF
-
-- there should be a license
-- the OSF project is publicly available
-- the folder structure is very clear (data and analysis are separated)
-- the OSF project did not have any explanation in the Wiki
-
-## Analysis
-
-- the JASP output could be added, together with the already present pdf
-- there are both xlsx and csv. to avoid redundancy and confusion, better keep only csv
-- **R Script PDR1.R**
-    - improve readability: maybe use `styler`?
-    - there is no data wrangling script. In other words, how was the "Final_Data" file produced from the "Raw_Data"? Although the process is described in the codebook, it would be nicer to document it as code.
-    - better documentation is needed for both analyses
-    - first analysis: means and SDs not reproduced, results not reproduced not only because of different numbers, but also because of a possible discrepancy in the statistical analysis (Wilcoxon signed rank in code, t-test in paper)
-    - second analysis: we were able to fully reproduce the results
-    - exploratory analysis: data cleaning commented out and confusing to follow, last exploratory analysis must be conducted on unfiltered dataset (but unclear in procedure)
-        - clear environment, rerun data loading, rerun all confirmatory analysis on new (filtered) dataset
-
-
-
-
-
-These findings are reproduced
-
-```{r}
 # Was there cheating?
 # time pressure
 nrow(data[data$TP == "1",])
@@ -415,14 +374,26 @@ chi2 <- unname(chisq.test(table(SP), p = c(1/6, 1/6, 1/6, 1/6, 1/6, 1/6))$statis
 nSP <- sum(data$TP == "0")
 Vsp <- sqrt(chi2/nSP*1)
 Vsp
+
 ```
 
+We **successfully** reproduced means and SDs reported in the manuscript (_Table 1_, p. 5).
 
-## Exploratory analyses
+## Exploratory Analyses
 
-### with exclusions
+```{r original-script-exploratory-analyses, eval = FALSE}
 
-```{r}
+################################
+###   Exploratory analyses   ###
+################################
+
+#without any exclusions
+#omit lines 36-40 and 96-97 and include 99-100
+
+#The subsample that expressed (strong) belief in the payment scheme
+#for this exploratory analysis, we only removed the hastag from line 26, the rest of the script remained the same
+#data <- data[data$Several.students.will.receive.a.monetary.reward.for.the.dice.under.cup.game. == "Believe" | data$Several.students.will.receive.a.monetary.reward.for.the.dice.under.cup.game. == "Strongly believe",]
+
 #time pressure manipulation check
 rtSP = data[data$TP == "0",]$Response.time
 rtTP = data[data$TP == "1",]$Response.time
@@ -434,60 +405,166 @@ sdTP <- sd(rtTP)
 maxTP <- mTP+5*sdTP
 rtSP = data[data$TP == "0" & data$Response.time<maxSP,]$Response.time
 rtTP = data[data$TP == "1" & data$Response.time<maxTP,]$Response.time
+#Exporatory analysis without exclusions: use lines 99-100 instead of 96-97
+#rtSP = data[data$TP == "0",]$Response.time
+#rtTP = data[data$TP == "1",]$Response.time
 mean(rtSP)
 sd(rtSP)
 mean(rtTP)
 sd(rtTP)
 t.test(rtSP,rtTP, var.equal = TRUE)
 effsize::cohen.d(rtSP,rtTP)
-```
 
-```{r}
 #Self-report ratings
 prop.table(table(data$The.ratio.between.the.dice.roll.and.the.possible.reward.is...))
 prop.table(table(data$My.dice.role.was.fully.anonymous.only.I.could.know.what.I.rolled.))
 mean(data$What.is.the.chance.that.you.will.get.the.reward.)
 sd(data$What.is.the.chance.that.you.will.get.the.reward.)
 prop.table(table(data$Several.students.will.receive.a.monetary.reward.for.the.dice.under.cup.game.))
+
 ```
 
-### without exclusions
+### Comments
 
-```{r eval = FALSE}
-# reload data such that none of the data is excluded
-data <- read.csv2("Data/Final_Data_PDR1.csv", header = TRUE)
-data$Response.time <- as.numeric(as.character(data$Response.time))
-names(data)[1] <- "Reported.outcome"
+We recommend the following:
+
+* keep the order of the analyses consistent between the script and manuscript
+* if confirmatory and exploratory datasets are different, save them separately instead of commenting/uncommenting operations (see below for an example)
+
+```{r comment-exploratory-analyses1}
+
+### DATA EXPLORATORY ANALYSES
+# load data
+data_explor <- read.csv2(here("authors_materials_OSF/Data/Final_Data_PDR1.csv"), header = TRUE)
+data_explor$Response.time <- as.numeric(as.character(data_explor$Response.time))
+names(data_explor)[1] <- "Reported.outcome"
+
 ```
 
-```{r eval = FALSE}
+* if exploratory analyses are run with and without outliers, save the two datasets in separate variables
+
+#### Results excluding outliers
+
+* for the self-report ratings, the sums of percentages reported in the manuscript should be calculated here as well
+
+```{r comment-exploratory-analyses2}
+
 #time pressure manipulation check
-rtSP = data[data$TP == "0",]$Response.time
-rtTP = data[data$TP == "1",]$Response.time
+rtSP = data_explor[data_explor$TP == "0",]$Response.time
+rtTP = data_explor[data_explor$TP == "1",]$Response.time
 mSP <- mean(rtSP)
 sdSP <- sd(rtSP)
 maxSP <- mSP+5*sdSP
 mTP <- mean(rtTP)
 sdTP <- sd(rtTP)
 maxTP <- mTP+5*sdTP
-rtSP = data[data$TP == "0",]$Response.time
-rtTP = data[data$TP == "1",]$Response.time
+rtSP = data_explor[data_explor$TP == "0" & data_explor$Response.time<maxSP,]$Response.time
+rtTP = data_explor[data_explor$TP == "1" & data_explor$Response.time<maxTP,]$Response.time
 mean(rtSP)
 sd(rtSP)
 mean(rtTP)
 sd(rtTP)
 t.test(rtSP,rtTP, var.equal = TRUE)
 effsize::cohen.d(rtSP,rtTP)
-```
 
-
-```{r eval = FALSE}
 #Self-report ratings
-prop.table(table(data$The.ratio.between.the.dice.roll.and.the.possible.reward.is...))
-prop.table(table(data$My.dice.role.was.fully.anonymous.only.I.could.know.what.I.rolled.))
-mean(data$What.is.the.chance.that.you.will.get.the.reward.)
-sd(data$What.is.the.chance.that.you.will.get.the.reward.)
-prop.table(table(data$Several.students.will.receive.a.monetary.reward.for.the.dice.under.cup.game.))
+prop.table(table(data_explor$The.ratio.between.the.dice.roll.and.the.possible.reward.is...))
+prop.table(table(data_explor$My.dice.role.was.fully.anonymous.only.I.could.know.what.I.rolled.))
+mean(data_explor$What.is.the.chance.that.you.will.get.the.reward.)
+sd(data_explor$What.is.the.chance.that.you.will.get.the.reward.)
+prop.table(table(data_explor$Several.students.will.receive.a.monetary.reward.for.the.dice.under.cup.game.))
+
+q1 <- prop.table(table(data_explor$The.ratio.between.the.dice.roll.and.the.possible.reward.is...))[4]
+q2 <- prop.table(table(data_explor$My.dice.role.was.fully.anonymous.only.I.could.know.what.I.rolled.))[1] + prop.table(table(data_explor$My.dice.role.was.fully.anonymous.only.I.could.know.what.I.rolled.))[4]
+q3 <- prop.table(table(data_explor$Several.students.will.receive.a.monetary.reward.for.the.dice.under.cup.game.))[1] + prop.table(table(data_explor$Several.students.will.receive.a.monetary.reward.for.the.dice.under.cup.game.))[4]
+
 ```
+
+We were **not** able to reproduce some of the results in the manuscript, although the direction of the effects is the same:
+
+* p. 9: _"Participants in the time-pressure condition took less time to report the outcome of the die roll (M = 4.98 s, SD = 1.39 s) than those in the self-paced condition (M = 9.10 s, SD = 5.43 s), t(425) = 10.38, p < .001, d = 1.01, 95% CI [0.80, 1.21], indicating a successful time-pressure manipulation."_
+* our calculations (differences in **bold**): _"Participants in the time-pressure condition took less time to report the outcome of the die roll (M = **`r mean(rtTP)`** s, SD = **`r sd(rtTP)`** s) than those in the self-paced condition (M = `r mean(rtSP)` s, SD = `r sd(rtSP)` s), t(**`r t.test(rtSP,rtTP, var.equal = TRUE)$parameter`**) = **`r t.test(rtSP,rtTP, var.equal = TRUE)$statistic`**, p < .001, d = **`r effsize::cohen.d(rtSP,rtTP)$estimate`**, 95% CI [**`r effsize::cohen.d(rtSP,rtTP)$conf.int[1]`**, **`r effsize::cohen.d(rtSP,rtTP)$conf.int[2]`**], indicating a successful time-pressure manipulation."_
+
+#### Results including outliers
+
+```{r comment-exploratory-analyses3}
+
+#time pressure manipulation check
+rtSP = data_explor[data_explor$TP == "0",]$Response.time
+rtTP = data_explor[data_explor$TP == "1",]$Response.time
+mSP <- mean(rtSP)
+sdSP <- sd(rtSP)
+maxSP <- mSP+5*sdSP
+mTP <- mean(rtTP)
+sdTP <- sd(rtTP)
+maxTP <- mTP+5*sdTP
+#Exporatory analysis without exclusions: use lines 99-100 instead of 96-97
+rtSP = data_explor[data_explor$TP == "0",]$Response.time
+rtTP = data_explor[data_explor$TP == "1",]$Response.time
+mean(rtSP)
+sd(rtSP)
+mean(rtTP)
+sd(rtTP)
+t.test(rtSP,rtTP, var.equal = TRUE)
+effsize::cohen.d(rtSP,rtTP)
+
+#Self-report ratings
+prop.table(table(data_explor$The.ratio.between.the.dice.roll.and.the.possible.reward.is...))
+prop.table(table(data_explor$My.dice.role.was.fully.anonymous.only.I.could.know.what.I.rolled.))
+mean(data_explor$What.is.the.chance.that.you.will.get.the.reward.)
+sd(data_explor$What.is.the.chance.that.you.will.get.the.reward.)
+prop.table(table(data_explor$Several.students.will.receive.a.monetary.reward.for.the.dice.under.cup.game.))
+
+q1 <- prop.table(table(data_explor$The.ratio.between.the.dice.roll.and.the.possible.reward.is...))[4]
+q2 <- prop.table(table(data_explor$My.dice.role.was.fully.anonymous.only.I.could.know.what.I.rolled.))[1] + prop.table(table(data_explor$My.dice.role.was.fully.anonymous.only.I.could.know.what.I.rolled.))[4]
+q3 <- prop.table(table(data_explor$Several.students.will.receive.a.monetary.reward.for.the.dice.under.cup.game.))[1] + prop.table(table(data_explor$Several.students.will.receive.a.monetary.reward.for.the.dice.under.cup.game.))[4]
+
+```
+
+We confirm that _"Repeating the analyses without any exclusions [...] did not alter the pattern of findings"_ (p. 9). However, we cannot verify whether results would be similar _"in the subsample that expressed (strong) belief in the payment scheme [...]"_, because no code is provided in this script.
+
+# General Comments
+
+## OSF
+
+- there should be a license
+- the OSF project is publicly available
+- the folder structure is very clear (data and analysis are separated)
+- the OSF project did not have any explanation in the Wiki
+
+## Analysis
+
+- the JASP output could be added, together with the already present pdf
+- there are both xlsx and csv. to avoid redundancy and confusion, better keep only csv
+- **R Script PDR1.R**
+    - follow code conventions (e.g., be consistent when using either `=` or `<-` when assigning variables): see the package `styler`
+    - there is no data wrangling script. In other words, how was the "Final_Data" file produced from the "Raw_Data"? Although the process is described in the codebook, it would be nicer to document it as code
+
+
+
+# NOTES GOOGLE FORM
+
+How could the documentation be improved? *
+
+  There could be a readme file included as well as a wiki page on the OSF project. Additionally, there could be more comments on the code itself and more documentation on the correspondence between analyses and reported results. We were a little confused about which data should be excluded for which analyses.
+
+
+What did you like about the documentation? *
+
+  There was a codebook, which is really important! The comments were clear and easy to understand, with the exception of data exclusion. It was also really nice to see the preregistered and exploratory analyses in separate sections in the paper. Although this is not strictly documentation, the folder structure is very clear and makes useful distinctions.
+
+
+Any suggestions on how the analysis could be more transparent?
+
+  We think that most of the improvements relate to documentation (discussed above). Additionally, code could be more readable, e.g. following styler (R package with addin). We also noticed that a couple of potentially useful scripts were not shared. Those are: 1) the script used to tidy up the raw data to create the final data file; 2) the script (or macros, list of  commands) used to run the Bayesian analysis.
+
+
+Any suggestions on how project could be more reusable?
+  
+  Adding a license would be a big help. Perhaps it would also be useful to use R projects. We think that this project would be very reusable with reproducibility in mind. Perhaps it wouldn't be reusable for different projects, but that's not a problem.
+
+Any final comments?
+
+  Thank you for sharing your work :) Other than a small problem with the path when loading the data, all the other code run without errors! However, we did have trouble reproducing the results (the actual numbers) from the first preregistered analysis.
 
 

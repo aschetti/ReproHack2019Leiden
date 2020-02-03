@@ -11,7 +11,7 @@
 
 <meta name="author" content="Antonio Schettino and Eirini Zormpa" />
 
-<meta name="date" content="2020-01-31" />
+<meta name="date" content="2020-02-03" />
 
 <title>ReproHack2019 (Leiden) - Reproducing Van der Cruyssen et al.</title>
 
@@ -1652,14 +1652,15 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">ReproHack2019 (Leiden) - Reproducing <a href="https://osf.io/qbk6z/">Van der Cruyssen et al.</a></h1>
+<h1 class="title toc-ignore">ReproHack2019 (Leiden) - Reproducing Van der Cruyssen et al.</h1>
 <h4 class="author"><a href="https://twitter.com/asch3tti">Antonio Schettino</a> and <a href="https://twitter.com/eirini_zormpa">Eirini Zormpa</a></h4>
-<h4 class="date">2020-01-31</h4>
+<h4 class="date">2020-02-03</h4>
 
 </div>
 
 
-<p>This is the original script (file available at /home/aschetti/Documents/Projects/ReproHack2019Leiden/authors_materials_OSF/Analysis/R Script PDR1.R).</p>
+<p>Preprint accessed on Jan. 30th 2020 from <a href="https://osf.io/qbk6z/">OSF Preprints</a>. Materials accessed on Jan. 30th 2020 from <a href="https://osf.io/xwzpc/">OSF</a>.</p>
+<p>Below is the original script (file available at /home/aschetti/Documents/Projects/ReproHack2019Leiden/authors_materials_OSF/Analysis/R Script PDR1.R).</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co">###################################</span></a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="co">###        Loading data         </span><span class="al">###</span></a>
 <a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co">###################################</span></a>
@@ -1810,8 +1811,8 @@ div.tocify {
 <li>load the data
 <ul>
 <li>authors wrote <code>read.csv2(&quot;Final_Data_PDR1.csv&quot;, header = TRUE)</code> but, according to their folder structure, it should be <code>read.csv2(&quot;Data/Final_Data_PDR1.csv&quot;, header = TRUE)</code></li>
-<li>better to use <em>R Projects</em> and locate files using the <code>here</code> package (see example below)</li>
-<li>better to integrate the codebook (available at <code>here(&quot;authors_materials_OSF/Codebook PDR1.pdf&quot;)</code>) and the analysis script, to help replicators understand the data (see the R package <a href="https://github.com/rubenarslan/codebook"><code>codebook</code></a>)</li>
+<li>to increase reproducibility, better to use <em>R Projects</em> and locate files using the <code>here</code> package (see example below)</li>
+<li>better to integrate the codebook (available at <code>here(&quot;authors_materials_OSF/Codebook PDR1.pdf&quot;)</code>) within the analysis script, to help replicators understand the data (see the R package <a href="https://github.com/rubenarslan/codebook"><code>codebook</code></a>)</li>
 </ul></li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># load data</span></a>
@@ -1958,54 +1959,13 @@ div.tocify {
 ## Test of significance of a  correlation 
 ##  t value 0.87    with probability &lt; 0.19
 ##  and confidence interval  -0.05 0.14</code></pre>
+<p>We <strong>successfully</strong> reproduced means and SDs reported in the manuscript (<em>Table 1</em>, p. 5).</p>
 <p>We recommend the following:</p>
 <ul>
-<li>we <strong>successfully</strong> reproduced means and SDs reported in the manuscript (<em>Table 1</em>, p. 5)</li>
-<li>minor typo: the rank-biserial correlation is 0.042, whereas in the manuscript it is reported as 0.05 (<em>Table 1</em>, p. 5)</li>
+<li>minor typo: the rank-biserial correlation is 0.042, whereas in the manuscript it is reported as <strong>0.05</strong> (<em>Table 1</em>, p. 5)</li>
 <li>better to save to variable all the results, e.g., also the confidence interval of <em>r</em></li>
-<li>it would be good to document the applied transformation from <em>W</em> to <em>Z</em>, as well as clarify that the lower bound of the confidence interval of the effect size <em>r</em> is infinite (instead of the obtained value -0.053) because the test is one-tailed</li>
+<li>it would be good to document the applied transformation from <em>W</em> to <em>Z</em>, as well as clarify that the lower bound of the confidence interval of the effect size <em>r</em> is infinite – instead of the obtained value -0.053 – because the test is one-tailed</li>
 </ul>
-<div id="section" class="section level59">
-<p></p>
-</div>
-</div>
-</div>
-<div id="old-comments" class="section level1">
-<h1>OLD COMMENTS</h1>
-<div id="section-1" class="section level59">
-<p></p>
-</div>
-</div>
-<div id="general-comments" class="section level1">
-<h1>General Comments</h1>
-<div id="osf" class="section level2">
-<h2>OSF</h2>
-<ul>
-<li>there should be a license</li>
-<li>the OSF project is publicly available</li>
-<li>the folder structure is very clear (data and analysis are separated)</li>
-<li>the OSF project did not have any explanation in the Wiki</li>
-</ul>
-</div>
-<div id="analysis" class="section level2">
-<h2>Analysis</h2>
-<ul>
-<li>the JASP output could be added, together with the already present pdf</li>
-<li>there are both xlsx and csv. to avoid redundancy and confusion, better keep only csv</li>
-<li><strong>R Script PDR1.R</strong>
-<ul>
-<li>improve readability: maybe use <code>styler</code>?</li>
-<li>there is no data wrangling script. In other words, how was the “Final_Data” file produced from the “Raw_Data”? Although the process is described in the codebook, it would be nicer to document it as code.</li>
-<li>better documentation is needed for both analyses</li>
-<li>first analysis: means and SDs not reproduced, results not reproduced not only because of different numbers, but also because of a possible discrepancy in the statistical analysis (Wilcoxon signed rank in code, t-test in paper)</li>
-<li>second analysis: we were able to fully reproduce the results</li>
-<li>exploratory analysis: data cleaning commented out and confusing to follow, last exploratory analysis must be conducted on unfiltered dataset (but unclear in procedure)
-<ul>
-<li>clear environment, rerun data loading, rerun all confirmatory analysis on new (filtered) dataset</li>
-</ul></li>
-</ul></li>
-</ul>
-<p>These findings are reproduced</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="co"># Was there cheating?</span></a>
 <a class="sourceLine" id="cb31-2" data-line-number="2"><span class="co"># time pressure</span></a>
 <a class="sourceLine" id="cb31-3" data-line-number="3"><span class="kw">nrow</span>(data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span>,])</a></code></pre></div>
@@ -2035,109 +1995,190 @@ div.tocify {
 <a class="sourceLine" id="cb41-3" data-line-number="3">Vsp &lt;-<span class="st"> </span><span class="kw">sqrt</span>(chi2<span class="op">/</span>nSP<span class="op">*</span><span class="dv">1</span>)</a>
 <a class="sourceLine" id="cb41-4" data-line-number="4">Vsp</a></code></pre></div>
 <pre><code>## [1] 0.198</code></pre>
+<p>We <strong>successfully</strong> reproduced means and SDs reported in the manuscript (<em>Table 1</em>, p. 5).</p>
+</div>
 </div>
 <div id="exploratory-analyses" class="section level2">
-<h2>Exploratory analyses</h2>
-<div id="with-exclusions" class="section level3">
-<h3>with exclusions</h3>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="co">#time pressure manipulation check</span></a>
-<a class="sourceLine" id="cb43-2" data-line-number="2">rtSP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span>,]<span class="op">$</span>Response.time</a>
-<a class="sourceLine" id="cb43-3" data-line-number="3">rtTP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span>,]<span class="op">$</span>Response.time</a>
-<a class="sourceLine" id="cb43-4" data-line-number="4">mSP &lt;-<span class="st"> </span><span class="kw">mean</span>(rtSP)</a>
-<a class="sourceLine" id="cb43-5" data-line-number="5">sdSP &lt;-<span class="st"> </span><span class="kw">sd</span>(rtSP)</a>
-<a class="sourceLine" id="cb43-6" data-line-number="6">maxSP &lt;-<span class="st"> </span>mSP<span class="op">+</span><span class="dv">5</span><span class="op">*</span>sdSP</a>
-<a class="sourceLine" id="cb43-7" data-line-number="7">mTP &lt;-<span class="st"> </span><span class="kw">mean</span>(rtTP)</a>
-<a class="sourceLine" id="cb43-8" data-line-number="8">sdTP &lt;-<span class="st"> </span><span class="kw">sd</span>(rtTP)</a>
-<a class="sourceLine" id="cb43-9" data-line-number="9">maxTP &lt;-<span class="st"> </span>mTP<span class="op">+</span><span class="dv">5</span><span class="op">*</span>sdTP</a>
-<a class="sourceLine" id="cb43-10" data-line-number="10">rtSP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span> <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>Response.time<span class="op">&lt;</span>maxSP,]<span class="op">$</span>Response.time</a>
-<a class="sourceLine" id="cb43-11" data-line-number="11">rtTP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span> <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>Response.time<span class="op">&lt;</span>maxTP,]<span class="op">$</span>Response.time</a>
-<a class="sourceLine" id="cb43-12" data-line-number="12"><span class="kw">mean</span>(rtSP)</a></code></pre></div>
+<h2>Exploratory Analyses</h2>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="co">################################</span></a>
+<a class="sourceLine" id="cb43-2" data-line-number="2"><span class="co">###   Exploratory analyses   </span><span class="al">###</span></a>
+<a class="sourceLine" id="cb43-3" data-line-number="3"><span class="co">################################</span></a>
+<a class="sourceLine" id="cb43-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb43-5" data-line-number="5"><span class="co">#without any exclusions</span></a>
+<a class="sourceLine" id="cb43-6" data-line-number="6"><span class="co">#omit lines 36-40 and 96-97 and include 99-100</span></a>
+<a class="sourceLine" id="cb43-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb43-8" data-line-number="8"><span class="co">#The subsample that expressed (strong) belief in the payment scheme</span></a>
+<a class="sourceLine" id="cb43-9" data-line-number="9"><span class="co">#for this exploratory analysis, we only removed the hastag from line 26, the rest of the script remained the same</span></a>
+<a class="sourceLine" id="cb43-10" data-line-number="10"><span class="co">#data &lt;- data[data$Several.students.will.receive.a.monetary.reward.for.the.dice.under.cup.game. == &quot;Believe&quot; | data$Several.students.will.receive.a.monetary.reward.for.the.dice.under.cup.game. == &quot;Strongly believe&quot;,]</span></a>
+<a class="sourceLine" id="cb43-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb43-12" data-line-number="12"><span class="co">#time pressure manipulation check</span></a>
+<a class="sourceLine" id="cb43-13" data-line-number="13">rtSP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span>,]<span class="op">$</span>Response.time</a>
+<a class="sourceLine" id="cb43-14" data-line-number="14">rtTP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span>,]<span class="op">$</span>Response.time</a>
+<a class="sourceLine" id="cb43-15" data-line-number="15">mSP &lt;-<span class="st"> </span><span class="kw">mean</span>(rtSP)</a>
+<a class="sourceLine" id="cb43-16" data-line-number="16">sdSP &lt;-<span class="st"> </span><span class="kw">sd</span>(rtSP)</a>
+<a class="sourceLine" id="cb43-17" data-line-number="17">maxSP &lt;-<span class="st"> </span>mSP<span class="op">+</span><span class="dv">5</span><span class="op">*</span>sdSP</a>
+<a class="sourceLine" id="cb43-18" data-line-number="18">mTP &lt;-<span class="st"> </span><span class="kw">mean</span>(rtTP)</a>
+<a class="sourceLine" id="cb43-19" data-line-number="19">sdTP &lt;-<span class="st"> </span><span class="kw">sd</span>(rtTP)</a>
+<a class="sourceLine" id="cb43-20" data-line-number="20">maxTP &lt;-<span class="st"> </span>mTP<span class="op">+</span><span class="dv">5</span><span class="op">*</span>sdTP</a>
+<a class="sourceLine" id="cb43-21" data-line-number="21">rtSP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span> <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>Response.time<span class="op">&lt;</span>maxSP,]<span class="op">$</span>Response.time</a>
+<a class="sourceLine" id="cb43-22" data-line-number="22">rtTP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span> <span class="op">&amp;</span><span class="st"> </span>data<span class="op">$</span>Response.time<span class="op">&lt;</span>maxTP,]<span class="op">$</span>Response.time</a>
+<a class="sourceLine" id="cb43-23" data-line-number="23"><span class="co">#Exporatory analysis without exclusions: use lines 99-100 instead of 96-97</span></a>
+<a class="sourceLine" id="cb43-24" data-line-number="24"><span class="co">#rtSP = data[data$TP == &quot;0&quot;,]$Response.time</span></a>
+<a class="sourceLine" id="cb43-25" data-line-number="25"><span class="co">#rtTP = data[data$TP == &quot;1&quot;,]$Response.time</span></a>
+<a class="sourceLine" id="cb43-26" data-line-number="26"><span class="kw">mean</span>(rtSP)</a>
+<a class="sourceLine" id="cb43-27" data-line-number="27"><span class="kw">sd</span>(rtSP)</a>
+<a class="sourceLine" id="cb43-28" data-line-number="28"><span class="kw">mean</span>(rtTP)</a>
+<a class="sourceLine" id="cb43-29" data-line-number="29"><span class="kw">sd</span>(rtTP)</a>
+<a class="sourceLine" id="cb43-30" data-line-number="30"><span class="kw">t.test</span>(rtSP,rtTP, <span class="dt">var.equal =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb43-31" data-line-number="31">effsize<span class="op">::</span><span class="kw">cohen.d</span>(rtSP,rtTP)</a>
+<a class="sourceLine" id="cb43-32" data-line-number="32"></a>
+<a class="sourceLine" id="cb43-33" data-line-number="33"><span class="co">#Self-report ratings</span></a>
+<a class="sourceLine" id="cb43-34" data-line-number="34"><span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>The.ratio.between.the.dice.roll.and.the.possible.reward.is...))</a>
+<a class="sourceLine" id="cb43-35" data-line-number="35"><span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>My.dice.role.was.fully.anonymous.only.I.could.know.what.I.rolled.))</a>
+<a class="sourceLine" id="cb43-36" data-line-number="36"><span class="kw">mean</span>(data<span class="op">$</span>What.is.the.chance.that.you.will.get.the.reward.)</a>
+<a class="sourceLine" id="cb43-37" data-line-number="37"><span class="kw">sd</span>(data<span class="op">$</span>What.is.the.chance.that.you.will.get.the.reward.)</a>
+<a class="sourceLine" id="cb43-38" data-line-number="38"><span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>Several.students.will.receive.a.monetary.reward.for.the.dice.under.cup.game.))</a></code></pre></div>
+<div id="comments-3" class="section level3">
+<h3>Comments</h3>
+<p>We recommend the following:</p>
+<ul>
+<li>keep the order of the analyses consistent between the script and manuscript</li>
+<li>if confirmatory and exploratory datasets are different, save them separately instead of commenting/uncommenting operations (see below for an example)</li>
+</ul>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1"><span class="co">### DATA EXPLORATORY ANALYSES</span></a>
+<a class="sourceLine" id="cb44-2" data-line-number="2"><span class="co"># load data</span></a>
+<a class="sourceLine" id="cb44-3" data-line-number="3">data_explor &lt;-<span class="st"> </span><span class="kw">read.csv2</span>(<span class="kw">here</span>(<span class="st">&quot;authors_materials_OSF/Data/Final_Data_PDR1.csv&quot;</span>), <span class="dt">header =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb44-4" data-line-number="4">data_explor<span class="op">$</span>Response.time &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">as.character</span>(data_explor<span class="op">$</span>Response.time))</a>
+<a class="sourceLine" id="cb44-5" data-line-number="5"><span class="kw">names</span>(data_explor)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;Reported.outcome&quot;</span></a></code></pre></div>
+<ul>
+<li>if exploratory analyses are run with and without outliers, save the two datasets in separate variables</li>
+</ul>
+<div id="results-excluding-outliers" class="section level4">
+<h4>Results excluding outliers</h4>
+<ul>
+<li>for the self-report ratings, the sums of percentages reported in the manuscript should be calculated here as well</li>
+</ul>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1"><span class="co">#time pressure manipulation check</span></a>
+<a class="sourceLine" id="cb45-2" data-line-number="2">rtSP =<span class="st"> </span>data_explor[data_explor<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span>,]<span class="op">$</span>Response.time</a>
+<a class="sourceLine" id="cb45-3" data-line-number="3">rtTP =<span class="st"> </span>data_explor[data_explor<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span>,]<span class="op">$</span>Response.time</a>
+<a class="sourceLine" id="cb45-4" data-line-number="4">mSP &lt;-<span class="st"> </span><span class="kw">mean</span>(rtSP)</a>
+<a class="sourceLine" id="cb45-5" data-line-number="5">sdSP &lt;-<span class="st"> </span><span class="kw">sd</span>(rtSP)</a>
+<a class="sourceLine" id="cb45-6" data-line-number="6">maxSP &lt;-<span class="st"> </span>mSP<span class="op">+</span><span class="dv">5</span><span class="op">*</span>sdSP</a>
+<a class="sourceLine" id="cb45-7" data-line-number="7">mTP &lt;-<span class="st"> </span><span class="kw">mean</span>(rtTP)</a>
+<a class="sourceLine" id="cb45-8" data-line-number="8">sdTP &lt;-<span class="st"> </span><span class="kw">sd</span>(rtTP)</a>
+<a class="sourceLine" id="cb45-9" data-line-number="9">maxTP &lt;-<span class="st"> </span>mTP<span class="op">+</span><span class="dv">5</span><span class="op">*</span>sdTP</a>
+<a class="sourceLine" id="cb45-10" data-line-number="10">rtSP =<span class="st"> </span>data_explor[data_explor<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span> <span class="op">&amp;</span><span class="st"> </span>data_explor<span class="op">$</span>Response.time<span class="op">&lt;</span>maxSP,]<span class="op">$</span>Response.time</a>
+<a class="sourceLine" id="cb45-11" data-line-number="11">rtTP =<span class="st"> </span>data_explor[data_explor<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span> <span class="op">&amp;</span><span class="st"> </span>data_explor<span class="op">$</span>Response.time<span class="op">&lt;</span>maxTP,]<span class="op">$</span>Response.time</a>
+<a class="sourceLine" id="cb45-12" data-line-number="12"><span class="kw">mean</span>(rtSP)</a></code></pre></div>
 <pre><code>## [1] 9.1</code></pre>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1"><span class="kw">sd</span>(rtSP)</a></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1"><span class="kw">sd</span>(rtSP)</a></code></pre></div>
 <pre><code>## [1] 5.43</code></pre>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1"><span class="kw">mean</span>(rtTP)</a></code></pre></div>
-<pre><code>## [1] 4.98</code></pre>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1"><span class="kw">sd</span>(rtTP)</a></code></pre></div>
-<pre><code>## [1] 1.39</code></pre>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="kw">t.test</span>(rtSP,rtTP, <span class="dt">var.equal =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1"><span class="kw">mean</span>(rtTP)</a></code></pre></div>
+<pre><code>## [1] 5.74</code></pre>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="kw">sd</span>(rtTP)</a></code></pre></div>
+<pre><code>## [1] 2.57</code></pre>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="kw">t.test</span>(rtSP,rtTP, <span class="dt">var.equal =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <pre><code>## 
 ##  Two Sample t-test
 ## 
 ## data:  rtSP and rtTP
-## t = 10, df = 425, p-value &lt;2e-16
+## t = 8, df = 456, p-value = 4e-16
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
-##  3.34 4.90
+##  2.58 4.14
 ## sample estimates:
 ## mean of x mean of y 
-##      9.10      4.98</code></pre>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1">effsize<span class="op">::</span><span class="kw">cohen.d</span>(rtSP,rtTP)</a></code></pre></div>
+##      9.10      5.74</code></pre>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1">effsize<span class="op">::</span><span class="kw">cohen.d</span>(rtSP,rtTP)</a></code></pre></div>
 <pre><code>## 
 ## Cohen's d
 ## 
-## d estimate: 1.01 (large)
+## d estimate: 0.791 (medium)
 ## 95 percent confidence interval:
 ## lower upper 
-## 0.805 1.210</code></pre>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1"><span class="co">#Self-report ratings</span></a>
-<a class="sourceLine" id="cb55-2" data-line-number="2"><span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>The.ratio.between.the.dice.roll.and.the.possible.reward.is...))</a></code></pre></div>
+## 0.600 0.981</code></pre>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="co">#Self-report ratings</span></a>
+<a class="sourceLine" id="cb57-2" data-line-number="2"><span class="kw">prop.table</span>(<span class="kw">table</span>(data_explor<span class="op">$</span>The.ratio.between.the.dice.roll.and.the.possible.reward.is...))</a></code></pre></div>
 <pre><code>## 
 ##   The reward (in euro) is equal to the outcome of the dice roll. 
-##                                                           0.0771 
+##                                                           0.0824 
 ## The reward (in euro) is four times the outcome of the dice roll. 
-##                                                           0.0117 
+##                                                           0.0130 
 ##    The reward (in euro) is half of the outcome of the dice roll. 
-##                                                           0.0117 
+##                                                           0.0108 
 ##  The reward (in euro) is two times the outcome of the dice roll. 
-##                                                           0.8995</code></pre>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>My.dice.role.was.fully.anonymous.only.I.could.know.what.I.rolled.))</a></code></pre></div>
+##                                                           0.8937</code></pre>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1"><span class="kw">prop.table</span>(<span class="kw">table</span>(data_explor<span class="op">$</span>My.dice.role.was.fully.anonymous.only.I.could.know.what.I.rolled.))</a></code></pre></div>
 <pre><code>## 
 ##                 Believe          Do not believe                 Neutral 
-##                  0.2313                  0.0537                  0.0771 
+##                  0.2343                  0.0564                  0.0781 
 ##        Strongly believe Strongly do not believe 
-##                  0.6098                  0.0280</code></pre>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1"><span class="kw">mean</span>(data<span class="op">$</span>What.is.the.chance.that.you.will.get.the.reward.)</a></code></pre></div>
-<pre><code>## [1] 22.5</code></pre>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1"><span class="kw">sd</span>(data<span class="op">$</span>What.is.the.chance.that.you.will.get.the.reward.)</a></code></pre></div>
-<pre><code>## [1] 26.8</code></pre>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1"><span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>Several.students.will.receive.a.monetary.reward.for.the.dice.under.cup.game.))</a></code></pre></div>
+##                  0.6009                  0.0304</code></pre>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1"><span class="kw">mean</span>(data_explor<span class="op">$</span>What.is.the.chance.that.you.will.get.the.reward.)</a></code></pre></div>
+<pre><code>## [1] 22.7</code></pre>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1"><span class="kw">sd</span>(data_explor<span class="op">$</span>What.is.the.chance.that.you.will.get.the.reward.)</a></code></pre></div>
+<pre><code>## [1] 27.1</code></pre>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" data-line-number="1"><span class="kw">prop.table</span>(<span class="kw">table</span>(data_explor<span class="op">$</span>Several.students.will.receive.a.monetary.reward.for.the.dice.under.cup.game.))</a></code></pre></div>
 <pre><code>## 
 ##                 Believe          Do not believe                 Neutral 
-##                  0.2570                  0.2477                  0.2617 
+##                  0.2516                  0.2451                  0.2603 
 ##        Strongly believe Strongly do not believe 
-##                  0.0911                  0.1425</code></pre>
-</div>
-<div id="without-exclusions" class="section level3">
-<h3>without exclusions</h3>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" data-line-number="1"><span class="co"># reload data such that none of the data is excluded</span></a>
-<a class="sourceLine" id="cb65-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw">read.csv2</span>(<span class="st">&quot;Data/Final_Data_PDR1.csv&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb65-3" data-line-number="3">data<span class="op">$</span>Response.time &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">as.character</span>(data<span class="op">$</span>Response.time))</a>
-<a class="sourceLine" id="cb65-4" data-line-number="4"><span class="kw">names</span>(data)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;Reported.outcome&quot;</span></a></code></pre></div>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" data-line-number="1"><span class="co">#time pressure manipulation check</span></a>
-<a class="sourceLine" id="cb66-2" data-line-number="2">rtSP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span>,]<span class="op">$</span>Response.time</a>
-<a class="sourceLine" id="cb66-3" data-line-number="3">rtTP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span>,]<span class="op">$</span>Response.time</a>
-<a class="sourceLine" id="cb66-4" data-line-number="4">mSP &lt;-<span class="st"> </span><span class="kw">mean</span>(rtSP)</a>
-<a class="sourceLine" id="cb66-5" data-line-number="5">sdSP &lt;-<span class="st"> </span><span class="kw">sd</span>(rtSP)</a>
-<a class="sourceLine" id="cb66-6" data-line-number="6">maxSP &lt;-<span class="st"> </span>mSP<span class="op">+</span><span class="dv">5</span><span class="op">*</span>sdSP</a>
-<a class="sourceLine" id="cb66-7" data-line-number="7">mTP &lt;-<span class="st"> </span><span class="kw">mean</span>(rtTP)</a>
-<a class="sourceLine" id="cb66-8" data-line-number="8">sdTP &lt;-<span class="st"> </span><span class="kw">sd</span>(rtTP)</a>
-<a class="sourceLine" id="cb66-9" data-line-number="9">maxTP &lt;-<span class="st"> </span>mTP<span class="op">+</span><span class="dv">5</span><span class="op">*</span>sdTP</a>
-<a class="sourceLine" id="cb66-10" data-line-number="10">rtSP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;0&quot;</span>,]<span class="op">$</span>Response.time</a>
-<a class="sourceLine" id="cb66-11" data-line-number="11">rtTP =<span class="st"> </span>data[data<span class="op">$</span>TP <span class="op">==</span><span class="st"> &quot;1&quot;</span>,]<span class="op">$</span>Response.time</a>
-<a class="sourceLine" id="cb66-12" data-line-number="12"><span class="kw">mean</span>(rtSP)</a>
-<a class="sourceLine" id="cb66-13" data-line-number="13"><span class="kw">sd</span>(rtSP)</a>
-<a class="sourceLine" id="cb66-14" data-line-number="14"><span class="kw">mean</span>(rtTP)</a>
-<a class="sourceLine" id="cb66-15" data-line-number="15"><span class="kw">sd</span>(rtTP)</a>
-<a class="sourceLine" id="cb66-16" data-line-number="16"><span class="kw">t.test</span>(rtSP,rtTP, <span class="dt">var.equal =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb66-17" data-line-number="17">effsize<span class="op">::</span><span class="kw">cohen.d</span>(rtSP,rtTP)</a></code></pre></div>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" data-line-number="1"><span class="co">#Self-report ratings</span></a>
-<a class="sourceLine" id="cb67-2" data-line-number="2"><span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>The.ratio.between.the.dice.roll.and.the.possible.reward.is...))</a>
-<a class="sourceLine" id="cb67-3" data-line-number="3"><span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>My.dice.role.was.fully.anonymous.only.I.could.know.what.I.rolled.))</a>
-<a class="sourceLine" id="cb67-4" data-line-number="4"><span class="kw">mean</span>(data<span class="op">$</span>What.is.the.chance.that.you.will.get.the.reward.)</a>
-<a class="sourceLine" id="cb67-5" data-line-number="5"><span class="kw">sd</span>(data<span class="op">$</span>What.is.the.chance.that.you.will.get.the.reward.)</a>
-<a class="sourceLine" id="cb67-6" data-line-number="6"><span class="kw">prop.table</span>(<span class="kw">table</span>(data<span class="op">$</span>Several.students.will.receive.a.monetary.reward.for.the.dice.under.cup.game.))</a></code></pre></div>
+##                  0.0954                  0.1475</code></pre>
+<p>We were <strong>not</strong> able to reproduce some of the results in the manuscript, although the direction of the effects is the same:</p>
+<ul>
+<li>p. 9: <em>“Participants in the time-pressure condition took less time to report the outcome of the die roll (M = 4.98 s, SD = 1.39 s) than those in the self-paced condition (M = 9.10 s, SD = 5.43 s), t(425) = 10.38, p &lt; .001, d = 1.01, 95% CI [0.80, 1.21], indicating a successful time-pressure manipulation.”</em>
+<ul>
+<li>our calculations (differences in <strong>bold</strong>): <em>“Participants in the time-pressure condition took less time to report the outcome of the die roll (M = <strong>5.741</strong> s, SD = <strong>2.567</strong> s) than those in the self-paced condition (M = 9.099 s, SD = 5.431 s), t(<strong>456</strong>) = <strong>8.459</strong>, p &lt; .001, d = <strong>0.791</strong>, 95% CI [<strong>0.6</strong>, <strong>0.981</strong>], indicating a successful time-pressure manipulation.”</em></li>
+</ul></li>
+</ul>
+<div id="section" class="section level59">
+<p></p>
 </div>
 </div>
+</div>
+</div>
+<div id="old-comments" class="section level1">
+<h1>OLD COMMENTS</h1>
+<div id="section-1" class="section level59">
+<p></p>
+</div>
+</div>
+<div id="general-comments" class="section level1">
+<h1>General Comments</h1>
+<div id="osf" class="section level2">
+<h2>OSF</h2>
+<ul>
+<li>there should be a license</li>
+<li>the OSF project is publicly available</li>
+<li>the folder structure is very clear (data and analysis are separated)</li>
+<li>the OSF project did not have any explanation in the Wiki</li>
+</ul>
+</div>
+<div id="analysis" class="section level2">
+<h2>Analysis</h2>
+<ul>
+<li>the JASP output could be added, together with the already present pdf</li>
+<li>there are both xlsx and csv. to avoid redundancy and confusion, better keep only csv</li>
+<li><strong>R Script PDR1.R</strong>
+<ul>
+<li>follow code conventions (e.g., be consistent when using either <code>=</code> or <code>&lt;-</code> when assigning variables): see the package <code>styler</code></li>
+<li>there is no data wrangling script. In other words, how was the “Final_Data” file produced from the “Raw_Data”? Although the process is described in the codebook, it would be nicer to document it as code</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="notes-google-form" class="section level1">
+<h1>NOTES GOOGLE FORM</h1>
+<p>How could the documentation be improved? *</p>
+<p>There could be a readme file included as well as a wiki page on the OSF project. Additionally, there could be more comments on the code itself and more documentation on the correspondence between analyses and reported results. We were a little confused about which data should be excluded for which analyses.</p>
+<p>What did you like about the documentation? *</p>
+<p>There was a codebook, which is really important! The comments were clear and easy to understand, with the exception of data exclusion. It was also really nice to see the preregistered and exploratory analyses in separate sections in the paper. Although this is not strictly documentation, the folder structure is very clear and makes useful distinctions.</p>
+<p>Any suggestions on how the analysis could be more transparent?</p>
+<p>We think that most of the improvements relate to documentation (discussed above). Additionally, code could be more readable, e.g. following styler (R package with addin). We also noticed that a couple of potentially useful scripts were not shared. Those are: 1) the script used to tidy up the raw data to create the final data file; 2) the script (or macros, list of commands) used to run the Bayesian analysis.</p>
+<p>Any suggestions on how project could be more reusable?</p>
+<p>Adding a license would be a big help. Perhaps it would also be useful to use R projects. We think that this project would be very reusable with reproducibility in mind. Perhaps it wouldn’t be reusable for different projects, but that’s not a problem.</p>
+<p>Any final comments?</p>
+<p>Thank you for sharing your work :) Other than a small problem with the path when loading the data, all the other code run without errors! However, we did have trouble reproducing the results (the actual numbers) from the first preregistered analysis.</p>
 </div>
 
 
