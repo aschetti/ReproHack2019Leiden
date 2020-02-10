@@ -36,7 +36,7 @@ opts_chunk$set(
 Preprint accessed on Jan. 30th 2020 from [OSF Preprints](https://osf.io/qbk6z/). Materials accessed on Jan. 30th 2020 from [OSF](https://osf.io/xwzpc/).
 
 # Original script
-Below is the original script. The file is available locally at `r here("authors_materials_OSF/Analysis/R Script PDR1.R")` --note that the absolute path will depend on where the R project file is located, but if the structure of the project folder remains the same, R will be able to read the file!
+Below is the original script. The file is available locally at `r here("authors_materials_OSF/Analysis/R Script PDR1.R")` -- note that the absolute path will depend on where the R project file is located, but if the structure of the project folder remains the same, R will be able to read the file!
 
 ```{r original-script, eval = FALSE}
 
@@ -121,7 +121,6 @@ nSP <- sum(data$TP == "0")
 Vsp <- sqrt(chi2/nSP*1)
 Vsp
 
-
 ###################################
 ###    Exploratory analyses     ###
 ###################################
@@ -153,6 +152,7 @@ prop.table(table(data$My.dice.role.was.fully.anonymous.only.I.could.know.what.I.
 mean(data$What.is.the.chance.that.you.will.get.the.reward.)
 sd(data$What.is.the.chance.that.you.will.get.the.reward.)
 prop.table(table(data$Several.students.will.receive.a.monetary.reward.for.the.dice.under.cup.game.))
+
 ```
 
 # Suggestions
@@ -203,7 +203,7 @@ library(psych)
 * load the data
     * authors wrote `read.csv2("Final_Data_PDR1.csv", header = TRUE)` but, according to their folder structure, it should be `read.csv2("Data/Final_Data_PDR1.csv", header = TRUE)`
     * to increase reproducibility, better to use _R Projects_ and locate files using the `here` package (see example below)
-    * better to integrate the codebook (available at `r here("authors_materials_OSF/Codebook PDR1.pdf")`) within the analysis script, to help replicators understand the data. To easily create codebooks with rich metadata that can be easily shared online see also the R package [`codebook`](https://github.com/rubenarslan/codebook).
+    * better to integrate the codebook (available at `r here("authors_materials_OSF/Codebook PDR1.pdf")`) within the analysis script, to help replicators understand the data. To easily create codebooks with rich metadata that can be easily shared online, see also the R package [`codebook`](https://github.com/rubenarslan/codebook).
 
 ```{r comment-load-data}
 
@@ -348,6 +348,7 @@ W
 rbc <- biserial.cor(data$Reported.outcome, data$TP)
 rbc
 r.test(n=n, r12=rbc, twotailed = FALSE)
+
 ```
 
 We **successfully** reproduced means and SDs reported in the manuscript (_Table 1_, p. 5).
@@ -356,7 +357,7 @@ We recommend the following:
 
 * minor typo: the rank-biserial correlation is `r rbc`, whereas in the manuscript it is reported as **0.05** (_Table 1_, p. 5)
 * better to save to variable all the results, e.g., also the confidence interval of _r_
-* it would be good to document the applied transformation from _W_ to _Z_, as well as clarify that the lower bound of the confidence interval of the effect size _r_ is infinite -- instead of the obtained value `r r.test(n=n, r12=rbc, twotailed = FALSE)$ci[1]` -- because the test is one-tailed
+* it would be good to document the applied transformation from _W_ to _Z_, as well as clarify that the lower bound of the confidence interval of the effect size _r_ is infinite -- instead of the obtained value `r r.test(n = n, r12 = rbc, twotailed = FALSE)$ci[1]` -- because the test is one-tailed
 
 ```{r comment-preregistered-analyses2}
 
@@ -433,7 +434,6 @@ We recommend the following:
 * keep the order of the analyses consistent between the script and manuscript
 * if confirmatory and exploratory datasets are different, save them separately instead of commenting/uncommenting operations (see below for an example)
 
-
 ```{r comment-exploratory-analyses1}
 
 ### DATA EXPLORATORY ANALYSES
@@ -443,7 +443,6 @@ data_explor$Response.time <- as.numeric(as.character(data_explor$Response.time))
 names(data_explor)[1] <- "Reported.outcome"
 
 ```
-
 
 #### Results excluding outliers
 
@@ -529,16 +528,27 @@ We confirm that _"Repeating the analyses without any exclusions [...] did not al
 
 ## OSF
 
-- there should be a license
+Good:
+
 - the OSF project is publicly available
-- the folder structure is very clear (data and analysis are separated)
-- the OSF project did not have any explanation in the Wiki
+- the folder structure is clear (data and analysis are separated)
+
+Room for improvement:
+
+- inlcuding a license (e.g., `CC-BY 4.0`) would increase the chance of reusability
+- the OSF project would benefit from an explanation of the project and files in the _Wiki_
 
 ## Analysis
 
-- the JASP output could be added, together with the already present pdf
-- there are both xlsx and csv. to avoid redundancy and confusion, better keep only csv
+Room for improvement:
+
+- the JASP output file could be added, together with the (already present) pdf
+- there are `.xlsx` and `.csv` files that, to our understanding, contain the same information. To avoid redundancy and confusion, better keep only the `.csv` file (typically preferred to Word documents, which are proprietary)
 - **R Script PDR1.R**
-    - follow code conventions (e.g., be consistent when using either `=` or `<-` when assigning variables): see the package `styler`
+    - it would be better to follow code conventions (e.g., be consistent when using either `=` or `<-` when assigning variables): for automatization, see the R package [`styler`](https://cran.r-project.org/web/packages/styler/vignettes/introducing_styler.html)
     - there is no data wrangling script. In other words, how was the "Final_Data" file produced from the "Raw_Data"? Although the process is described in the codebook, it would be nicer to document it as code
+
+***
+***
+
 
