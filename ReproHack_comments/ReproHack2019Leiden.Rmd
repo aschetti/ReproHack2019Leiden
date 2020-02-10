@@ -36,7 +36,7 @@ opts_chunk$set(
 Preprint accessed on Jan. 30th 2020 from [OSF Preprints](https://osf.io/qbk6z/). Materials accessed on Jan. 30th 2020 from [OSF](https://osf.io/xwzpc/).
 
 # Original script
-Below is the original script (file available at `here("authors_materials_OSF/Analysis/R Script PDR1.R)`).
+Below is the original script. The file is available locally at `r here("authors_materials_OSF/Analysis/R Script PDR1.R")` --note that the absolute path will depend on where the R project file is located, but if the structure of the project folder remains the same, R will be able to read the file!
 
 ```{r original-script, eval = FALSE}
 
@@ -203,7 +203,7 @@ library(psych)
 * load the data
     * authors wrote `read.csv2("Final_Data_PDR1.csv", header = TRUE)` but, according to their folder structure, it should be `read.csv2("Data/Final_Data_PDR1.csv", header = TRUE)`
     * to increase reproducibility, better to use _R Projects_ and locate files using the `here` package (see example below)
-    * better to integrate the codebook (available at `here("authors_materials_OSF/Codebook PDR1.pdf")`) within the analysis script, to help replicators understand the data. To easily create codebooks with rich metadata that can be easily shared online see also the R package [`codebook`](https://github.com/rubenarslan/codebook).
+    * better to integrate the codebook (available at `r here("authors_materials_OSF/Codebook PDR1.pdf")`) within the analysis script, to help replicators understand the data. To easily create codebooks with rich metadata that can be easily shared online see also the R package [`codebook`](https://github.com/rubenarslan/codebook).
 
 ```{r comment-load-data}
 
